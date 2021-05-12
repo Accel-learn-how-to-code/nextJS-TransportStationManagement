@@ -1,21 +1,22 @@
 import React from "react";
 import clsx from "clsx";
-import MenuIcon from "@material-ui/icons/Menu";
-import { useStyles, drawerWidth } from "../styles/AppBarStyles";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import { mainListItems } from "../components/listItems";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  IconButton,
-  Divider,
-  Drawer,
-  List,
-} from "@material-ui/core";
 
-export default function Dashboard({ title }) {
-  const classes = useStyles();
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Drawer from "@material-ui/core/Drawer";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import List from "@material-ui/core/List";
+import Typography from "@material-ui/core/Typography";
+import Divider from "@material-ui/core/Divider";
+import IconButton from "@material-ui/core/IconButton";
+
+import MenuIcon from "@material-ui/icons/Menu";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+
+import MainListItem from "../components/listItems";
+import { useStyles, drawerWidth } from "../styles/DashBoard";
+
+export default function DashBoard(props) {
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -23,8 +24,12 @@ export default function Dashboard({ title }) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  const classes = useStyles();
+  //Check the page user is Admin or not
+
   return (
-    <>
+    <div className={classes.root}>
+      <CssBaseline />
       <AppBar
         position="absolute"
         className={clsx(classes.appBar, open && classes.appBarShift)}
@@ -49,7 +54,7 @@ export default function Dashboard({ title }) {
             noWrap
             className={classes.title}
           >
-            {title}
+            Quản lý bến xe
           </Typography>
         </Toolbar>
       </AppBar>
@@ -67,9 +72,17 @@ export default function Dashboard({ title }) {
           </IconButton>
         </div>
         <Divider />
-        <List>{mainListItems}</List>
+        <List>
+          <MainListItem items={props.items} />
+        </List>
         <Divider />
       </Drawer>
-    </>
+
+      {/* <AppBarr title="Quản lý bến xe" /> */}
+      <main className={classes.content}>
+        <div className={classes.appBarSpacer} />
+        {props.children}
+      </main>
+    </div>
   );
 }
