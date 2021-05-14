@@ -9,7 +9,7 @@ export default function Users({ users }) {
     </div>
   );
 }
-Users.UsersMenu = UsersMenu;
+Users.UsersMenuu = UsersMenu;
 
 export const getServerSideProps = async (ctx) => {
   const users = await getUsers();

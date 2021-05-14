@@ -19,7 +19,7 @@ export async function getUsers() {
   try {
     let pool = await sql.connect(sqlConfig);
     let result = await pool.request().query("SELECT * from Bank");
-    //console.log(result.recordset);
+    console.log(typeof(result.recordset))
     //sql.close();
     return result.recordset;
   } catch (error) {
@@ -27,4 +27,3 @@ export async function getUsers() {
   }
 }
 
-//getUsers();
