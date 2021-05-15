@@ -12,13 +12,7 @@ import {
 } from "@material-ui/core";
 import Link from "next/link";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    achorTag: {
-      textDecoration: "none",
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => createStyles({}));
 
 export default function MainListItemsProps({ items }) {
   const classes = useStyles();
@@ -26,12 +20,10 @@ export default function MainListItemsProps({ items }) {
     <div>
       {items.map((x, index) => (
         <Link key={index} href={x.path}>
-          <a className={classes.achorTag}>
-            <ListItem button>
-              <ListItemIcon>{x.icon}</ListItemIcon>
-              <ListItemText primary={x.name} />
-            </ListItem>
-          </a>
+          <ListItem button>
+            <ListItemIcon>{x.icon}</ListItemIcon>
+            <ListItemText primary={x.name} />
+          </ListItem>
         </Link>
       ))}
     </div>

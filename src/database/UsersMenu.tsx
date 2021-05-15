@@ -8,26 +8,26 @@ export const UsersMenu = [
   {
     name: "Quản lý xe",
     icon: <DashboardIcon />,
-    path: "/users/Vehicles",
+    path: "/users/vehicles",
   },
   {
     name: "Quản lý tuyến xe",
     icon: <ShoppingCartIcon />,
-    path: "/users/TuyenXe",
+    path: "/users/tuyenXe",
   },
   {
     name: "Quản lý chuyến xe",
     icon: <PeopleIcon />,
-    path: "/users/ChuyenXe",
+    path: "/users/chuyenXe",
   },
   {
     name: "Thông tin ra vào",
     icon: <BarChartIcon />,
-    path: "/users/EntranceInfor",
+    path: "/users/entrance-infor",
   },
   {
     name: "Thông tin cá nhân",
     icon: <LayersIcon />,
-    path: "/users/Profile",
+    path: "/users/profile",
   },
 ];

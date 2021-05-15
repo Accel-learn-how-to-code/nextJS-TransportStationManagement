@@ -1,4 +1,4 @@
-import sql from "mssql";
+const sql = require("mssql");
 
 const sqlConfig = {
   user: "sa",
@@ -11,21 +11,27 @@ const sqlConfig = {
     idleTimeoutMillis: 30000,
   },
   options: {
-    trustServerCertificate: true, 
+    trustServerCertificate: true,
   },
 };
 
-
-export async function getUsers() {
+async function pool() {
   try {
-    let pool = await sql.connect(sqlConfig);
-    let result = await pool.request().query("SELECT * from Bank");
-    console.log(typeof(result.recordset))
-    //sql.close();
-    return result.recordset;
+    return await sql.connect(sqlConfig);
   } catch (error) {
     console.log(error);
   }
 }
 
+async function getUsers() {
+  try {
+    let pool = await sql.connect(sqlConfig);
+    let result = await pool.request().query("SELECT * from Bank");
+    console.log(result.recordset);
+    //sql.close();
+  } catch (error) {
+    console.log(error);
+  }
+}
 
+getUsers();

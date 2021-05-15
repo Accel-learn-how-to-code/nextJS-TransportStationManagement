@@ -9,6 +9,7 @@ import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
+import Container from '@material-ui/core/Container';
 
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
@@ -81,7 +82,9 @@ export default function DashBoard(props) {
       {/* <AppBarr title="Quản lý bến xe" /> */}
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        {props.children}
+        <Container maxWidth="lg" className={classes.container}>
+          {props.children}
+        </Container>
       </main>
     </div>
   );

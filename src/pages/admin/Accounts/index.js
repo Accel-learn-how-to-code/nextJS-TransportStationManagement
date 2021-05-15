@@ -1,7 +1,7 @@
 import React from "react";
 import { AdminMenu } from "../../../database/AdminMenu";
-
+import DataTable from "../../../components/DataTable.tsx";
 export default function Accounts() {
-  return <div>Hello Account Adminnnn</div>
+  return <DataTable />;
 }
 Accounts.AdminMenu = AdminMenu;
