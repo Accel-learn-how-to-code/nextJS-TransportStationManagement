@@ -9,21 +9,26 @@ import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import SearchIcon from "@material-ui/icons/Search";
+import GetAppIcon from '@material-ui/icons/GetApp';
+import Title from "../../../components/Title"
 
 const useStyles = makeStyles((theme) => ({
   grid: {
     marginTop: 20,
+    paddingTop: 15,
+    paddingLeft: 10,
   },
   gridInputHolder: {
     display: "flex",
     justifyContent: "center",
   },
   inputHolder: {
+    flexGrow: 1,
     display: "flex",
     alignItems: "center",
   },
   input: {
-    minWidth: 150,
+    flexGrow: 1,
     marginRight: 10,
   },
   gridButtonHolder: {
@@ -46,8 +51,8 @@ const useStyles = makeStyles((theme) => ({
 
 const columns = [
   { field: "id", headerName: "ID", width: 70 },
-  { field: "firstName", headerName: "First name", width: 100 },
-  { field: "lastName", headerName: "Last name", width: 100 },
+  { field: "firstName", headerName: "First name", width: 130 },
+  { field: "lastName", headerName: "Last name", width: 130 },
   {
     field: "age",
     headerName: "Age",
@@ -134,9 +139,10 @@ export default function Accounts() {
   return (
     <div>
       <Breadcrumbs />
-      <Paper elevation={3} className={classes.grid}>
+      <Paper elevation={2} className={classes.grid}>
+        <Title>Quản lý tài khoản người dùng</Title>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={7} className={classes.gridInputHolder}>
+          <Grid item xs={12} sm={5} className={classes.gridInputHolder}>
             <div className={classes.inputHolder}>
               <Autocomplete
                 className={classes.input}
@@ -162,7 +168,7 @@ export default function Accounts() {
               </Button>
             </div>
           </Grid>
-          <Grid item xs={12} sm={5} className={classes.gridButtonHolder}>
+          <Grid item xs={12} sm={7} className={classes.gridButtonHolder}>
             <div className={classes.buttonHolder}>
               <Button
                 variant="contained"
@@ -173,10 +179,13 @@ export default function Accounts() {
                 Add New
               </Button>
               <IconButton aria-label="delete" className={classes.icon}>
-                <DeleteIcon fontSize="large" />
+                <GetAppIcon fontSize="large" />
               </IconButton>
               <IconButton aria-label="refresh" className={classes.icon}>
                 <RefreshIcon fontSize="large" />
+              </IconButton>
+              <IconButton aria-label="refresh" className={classes.icon}>
+                <DeleteIcon fontSize="large" />
               </IconButton>
             </div>
           </Grid>

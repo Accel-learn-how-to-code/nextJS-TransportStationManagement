@@ -40,7 +40,7 @@ export default function DataTable({ dataTable, dataTableColumns }) {
     <Paper className={classes.paper}>
       <Title>Users Account</Title>
       <TabContext value={value}>
-        <AppBar elevation={1} position="static">
+        <AppBar elevation={2} position="static">
           <TabList
             className={classes.tabList}
             onChange={handleChange}
@@ -67,7 +67,7 @@ export default function DataTable({ dataTable, dataTableColumns }) {
               <DataGrid
                 rows={element.data}
                 columns={dataTableColumns}
-                pageSize={5}
+                // pageSize={5}
                 checkboxSelection
               />
             </div>
