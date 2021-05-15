@@ -14,8 +14,8 @@ import Container from '@material-ui/core/Container';
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 
-import MainListItem from "../components/listItems";
-import { useStyles, drawerWidth } from "../styles/DashBoard";
+import MainListItem from "./listItemsDashboard";
+import { useStyles, drawerWidth } from "../../styles/DashBoard";
 
 export default function DashBoard(props) {
   const [open, setOpen] = React.useState(true);

@@ -6,7 +6,7 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 import theme from "./theme";
-import DashBoard from "../components/DashBoard";
+import DashBoard from "../components/DashBoard/DashBoard";
 
 export default function MyApp(props) {
   const { Component, pageProps } = props;
