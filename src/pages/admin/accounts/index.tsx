@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Paper, Grid, TextField, Button, IconButton } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
@@ -9,8 +9,8 @@ import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import SearchIcon from "@material-ui/icons/Search";
-import GetAppIcon from '@material-ui/icons/GetApp';
-import Title from "../../../components/Title"
+import GetAppIcon from "@material-ui/icons/GetApp";
+import Title from "../../../components/Title";
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -77,7 +77,7 @@ const columns = [
   },
 ];
 
-const allUsers = [
+const dataUsers = [
   { id: 1, lastName: "Snow", firstName: "Jon", age: 35, gender: "male" },
   {
     id: 2,
@@ -113,29 +113,49 @@ const allUsers = [
   { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65, gender: "female" },
 ];
 
-const maleUsers = allUsers.filter((x) => x.gender === "male");
-const femaleUsers = allUsers.filter((x) => x.gender === "female");
-
-const data = [
-  {
-    value: "1",
-    label: "All",
-    data: allUsers,
-  },
-  {
-    value: "2",
-    label: "Male",
-    data: maleUsers,
-  },
-  {
-    value: "3",
-    label: "Female",
-    data: femaleUsers,
-  },
-];
-
 export default function Accounts() {
   const classes = useStyles();
+  const [allUsers, setAllUsers] = useState(dataUsers);
+  const [inputValue, setInputvalue] = useState("");
+
+  const maleUsers = allUsers.filter((x) => x.gender === "male");
+  const femaleUsers = allUsers.filter((x) => x.gender === "female");
+  const data = [
+    {
+      value: "1",
+      label: "All",
+      data: allUsers,
+    },
+    {
+      value: "2",
+      label: "Male",
+      data: maleUsers,
+    },
+    {
+      value: "3",
+      label: "Female",
+      data: femaleUsers,
+    },
+  ];
+
+  const handleChange1 = (event: any, newValue: any) => {
+    console.log("2" + newValue);
+    setInputvalue(newValue);
+  };
+  const handleChange2 = (event) => {
+    console.log("3" + event.target.value);
+    setInputvalue(event.target.value);
+  };
+  const searchUsersName = () => {
+    let searchedUsers = allUsers.filter((x) =>
+      x.firstName.includes(inputValue)
+    );
+    console.log("Button Clicked: " + inputValue);
+    //console.log("2" + JSON.stringify(searchedUsers));
+    //console.log("3" + typeof searchedUsers);
+    //searchedUsers != null ? setAllUsers(searchedUsers) : null;
+  };
+
   return (
     <div>
       <Breadcrumbs />
@@ -147,14 +167,18 @@ export default function Accounts() {
               <Autocomplete
                 className={classes.input}
                 id="free-solo"
-                freeSolo
                 options={allUsers.map((option) => option.firstName)}
+                // onChange={(event: any, newValue: any) => {
+                //   setInputvalue(newValue);
+                // }}
+                onChange={handleChange1}
                 renderInput={(params) => (
                   <TextField
                     {...params}
                     label="Tìm kiếm"
                     variant="outlined"
                     size="small"
+                    onChange={handleChange2}
                   />
                 )}
               />
@@ -163,6 +187,7 @@ export default function Accounts() {
                 color="primary"
                 startIcon={<SearchIcon />}
                 className={classes.button}
+                onClick={searchUsersName}
               >
                 SEARCH
               </Button>
