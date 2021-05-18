@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import { Paper, Grid, TextField, Button, IconButton } from "@material-ui/core";
-import { Autocomplete } from "@material-ui/lab";
+import { Autocomplete, Alert } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
+
 import { AdminMenu } from "../../../database/AdminMenu";
 import DataTable from "../../../components/DataTable";
 import Breadcrumbs from "../../../components/Breadcrumbs";
+
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import SearchIcon from "@material-ui/icons/Search";
 import GetAppIcon from "@material-ui/icons/GetApp";
+
 import Title from "../../../components/Title";
+import Modal from "../../../components/Modal";
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -46,6 +50,12 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     maxHeight: 40,
+  },
+  alert: {
+    width: "100%",
+    "& > * + *": {
+      marginTop: theme.spacing(2),
+    },
   },
 }));
 
@@ -117,6 +127,7 @@ export default function Accounts() {
   const classes = useStyles();
   const [allUsers, setAllUsers] = useState(dataUsers);
   const [inputValue, setInputvalue] = useState("");
+  const [alertModel, setAlertModel] = useState(false);
 
   const maleUsers = allUsers.filter((x) => x.gender === "male");
   const femaleUsers = allUsers.filter((x) => x.gender === "female");
@@ -138,49 +149,65 @@ export default function Accounts() {
     },
   ];
 
-  const handleChange1 = (event: any, newValue: any) => {
+  const handleChangeAutocomplete = (event: any, newValue: any) => {
     console.log("2" + newValue);
     setInputvalue(newValue);
   };
-  const handleChange2 = (event) => {
+  const handleChangeTextField = (event) => {
     console.log("3" + event.target.value);
     setInputvalue(event.target.value);
   };
   const searchUsersName = () => {
-    let searchedUsers = allUsers.filter((x) =>
-      x.firstName.includes(inputValue)
-    );
-    console.log("Button Clicked: " + inputValue);
-    //console.log("2" + JSON.stringify(searchedUsers));
-    //console.log("3" + typeof searchedUsers);
-    //searchedUsers != null ? setAllUsers(searchedUsers) : null;
+    let searchedUsers = inputValue
+      ? allUsers.filter((x) =>
+          x.firstName.toLowerCase().includes(inputValue.toLowerCase())
+        )
+      : null;
+    // console.log("Button Clicked: " + inputValue);
+    // console.log("Object: " + JSON.stringify(searchedUsers));
+    // console.log("typeof: " + typeof searchedUsers);
+    searchedUsers
+      ? (setAllUsers(searchedUsers), setAlertModel(false))
+      : (setAllUsers(dataUsers), setAlertModel(true));
   };
-
+  console.log("rendeerr");
   return (
     <div>
       <Breadcrumbs />
+      {alertModel ? (
+        <div className={classes.alert}>
+          <Alert severity="error">
+            This is an error alert — <strong>check it out!</strong>
+          </Alert>
+        </div>
+      ) : null}
       <Paper elevation={2} className={classes.grid}>
         <Title>Quản lý tài khoản người dùng</Title>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={5} className={classes.gridInputHolder}>
             <div className={classes.inputHolder}>
-              <Autocomplete
+              {/* <Autocomplete
                 className={classes.input}
                 id="free-solo"
                 options={allUsers.map((option) => option.firstName)}
-                // onChange={(event: any, newValue: any) => {
-                //   setInputvalue(newValue);
-                // }}
-                onChange={handleChange1}
+                onChange={handleChangeAutocomplete}
                 renderInput={(params) => (
                   <TextField
                     {...params}
                     label="Tìm kiếm"
                     variant="outlined"
                     size="small"
-                    onChange={handleChange2}
+                    onChange={handleChangeTextField}
                   />
                 )}
+              /> */}
+              <TextField
+                className={classes.input}
+                label="Tìm kiếm"
+                variant="outlined"
+                size="small"
+                value={inputValue}
+                onChange={handleChangeTextField}
               />
               <Button
                 variant="contained"
