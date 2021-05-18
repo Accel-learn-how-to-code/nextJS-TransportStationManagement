@@ -13,8 +13,8 @@ import RefreshIcon from "@material-ui/icons/Refresh";
 import SearchIcon from "@material-ui/icons/Search";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
+import SearchInput from "../../../components/searchInput";
 import Title from "../../../components/Title";
-import Modal from "../../../components/Modal";
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: 40,
   },
   alert: {
+    marginTop: 5,
     width: "100%",
     "& > * + *": {
       marginTop: theme.spacing(2),
@@ -126,7 +127,7 @@ const dataUsers = [
 export default function Accounts() {
   const classes = useStyles();
   const [allUsers, setAllUsers] = useState(dataUsers);
-  const [inputValue, setInputvalue] = useState("");
+  const [refesh, setRefresh] = useState(false);
   const [alertModel, setAlertModel] = useState(false);
 
   const maleUsers = allUsers.filter((x) => x.gender === "male");
@@ -149,27 +150,24 @@ export default function Accounts() {
     },
   ];
 
-  const handleChangeAutocomplete = (event: any, newValue: any) => {
-    console.log("2" + newValue);
-    setInputvalue(newValue);
+  const refreshData = () => {
+    setRefresh(!refesh);
+    setAllUsers(dataUsers);
+    setAlertModel(false);
   };
-  const handleChangeTextField = (event) => {
-    console.log("3" + event.target.value);
-    setInputvalue(event.target.value);
-  };
-  const searchUsersName = () => {
+
+  const searchUsersName = (inputValue) => {
     let searchedUsers = inputValue
       ? allUsers.filter((x) =>
           x.firstName.toLowerCase().includes(inputValue.toLowerCase())
         )
       : null;
-    // console.log("Button Clicked: " + inputValue);
-    // console.log("Object: " + JSON.stringify(searchedUsers));
-    // console.log("typeof: " + typeof searchedUsers);
-    searchedUsers
+    console.log("Button Clicked: " + inputValue);
+    searchedUsers && searchedUsers.length > 0
       ? (setAllUsers(searchedUsers), setAlertModel(false))
       : (setAllUsers(dataUsers), setAlertModel(true));
   };
+
   console.log("rendeerr");
   return (
     <div>
@@ -177,7 +175,7 @@ export default function Accounts() {
       {alertModel ? (
         <div className={classes.alert}>
           <Alert severity="error">
-            This is an error alert — <strong>check it out!</strong>
+            This is an error alert — <strong>Không tìm thấy người dùng!</strong>
           </Alert>
         </div>
       ) : null}
@@ -185,41 +183,9 @@ export default function Accounts() {
         <Title>Quản lý tài khoản người dùng</Title>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={5} className={classes.gridInputHolder}>
-            <div className={classes.inputHolder}>
-              {/* <Autocomplete
-                className={classes.input}
-                id="free-solo"
-                options={allUsers.map((option) => option.firstName)}
-                onChange={handleChangeAutocomplete}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Tìm kiếm"
-                    variant="outlined"
-                    size="small"
-                    onChange={handleChangeTextField}
-                  />
-                )}
-              /> */}
-              <TextField
-                className={classes.input}
-                label="Tìm kiếm"
-                variant="outlined"
-                size="small"
-                value={inputValue}
-                onChange={handleChangeTextField}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={<SearchIcon />}
-                className={classes.button}
-                onClick={searchUsersName}
-              >
-                SEARCH
-              </Button>
-            </div>
+            <SearchInput searchUsersName={searchUsersName} refesh={refesh} />
           </Grid>
+
           <Grid item xs={12} sm={7} className={classes.gridButtonHolder}>
             <div className={classes.buttonHolder}>
               <Button
@@ -233,7 +199,11 @@ export default function Accounts() {
               <IconButton aria-label="delete" className={classes.icon}>
                 <GetAppIcon fontSize="large" />
               </IconButton>
-              <IconButton aria-label="refresh" className={classes.icon}>
+              <IconButton
+                aria-label="refresh"
+                className={classes.icon}
+                onClick={refreshData}
+              >
                 <RefreshIcon fontSize="large" />
               </IconButton>
               <IconButton aria-label="refresh" className={classes.icon}>
