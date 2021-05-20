@@ -3,7 +3,7 @@ const sql = require("mssql");
 const sqlConfig = {
   user: "sa",
   password: "123456",
-  database: "alice",
+  database: "QLBenXe",
   server: "localhost",
   pool: {
     max: 10,
@@ -26,7 +26,7 @@ async function pool() {
 async function getUsers() {
   try {
     let pool = await sql.connect(sqlConfig);
-    let result = await pool.request().query("SELECT * from Bank");
+    let result = await pool.request().query("SELECT * from tblAdmin");
     console.log(result.recordset);
     //sql.close();
   } catch (error) {

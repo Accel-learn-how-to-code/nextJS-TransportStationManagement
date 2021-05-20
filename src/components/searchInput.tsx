@@ -28,7 +28,6 @@ export default function SearchInput({ searchUsersName, refesh }) {
   }, [refesh]);
 
   const handleChangeTextField = (event) => {
-    //console.log("Input: " + event.target.value);
     setInputvalue(event.target.value);
   };
 
@@ -36,7 +35,6 @@ export default function SearchInput({ searchUsersName, refesh }) {
     searchUsersName(inputValue);
   };
 
-  console.log("rendeerr input");
   return (
     <div className={classes.inputHolder}>
       <TextField

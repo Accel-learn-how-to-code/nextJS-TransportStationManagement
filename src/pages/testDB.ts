@@ -15,33 +15,14 @@ const sqlConfig = {
   },
 };
 
-export async function getAdmin() {
+export async function getAllUsers() {
   try {
     let pool = await sql.connect(sqlConfig);
-    let result = await pool.request().query("SELECT * from tblAdmin");
-    console.log(typeof result.recordset);
+    let result = await pool.request().query("select id, UsersName, AccountType, TelNo, Email, Gender from tblAccount");
+    console.log(result.recordset);
     return result.recordset;
   } catch (error) {
     console.log(error);
   }
 }
-export async function getChuXe() {
-  try {
-    let pool = await sql.connect(sqlConfig);
-    let result = await pool.request().query("SELECT * from tblChuXe");
-    console.log(typeof result.recordset);
-    return result.recordset;
-  } catch (error) {
-    console.log(error);
-  }
-}
-export async function getNhaXe() {
-  try {
-    let pool = await sql.connect(sqlConfig);
-    let result = await pool.request().query("SELECT * from tblNhaXe");
-    console.log(typeof result.recordset);
-    return result.recordset;
-  } catch (error) {
-    console.log(error);
-  }
-}
+

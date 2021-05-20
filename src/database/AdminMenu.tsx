@@ -13,12 +13,12 @@ export const AdminMenu = [
   {
     name: "Quản lý tuyến xe",
     icon: <ShoppingCartIcon />,
-    path: "/admin/tuyenXe",
+    path: "/admin/tuyen-xe",
   },
   {
     name: "Quản lý chuyến xe",
     icon: <PeopleIcon />,
-    path: "/admin/chuyenXe",
+    path: "/admin/chuyen-xe",
   },
   {
     name: "Thông tin ra vào",
