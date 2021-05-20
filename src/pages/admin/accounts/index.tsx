@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
 
 const columns = [
   { field: "id", headerName: "ID", width: 100 },
-  { field: "UsersName", headerName: "Họ tên", width: 200 },
+  { field: "UsersName", headerName: "Name", width: 200 },
   { field: "AccountType", headerName: "Type", width: 90 },
   { field: "TelNo", headerName: "Phone", width: 130 },
   { field: "Email", headerName: "Email", width: 250 },
@@ -150,9 +150,6 @@ export default function Accounts({ dataUsers }) {
               >
                 Add New
               </Button>
-              <IconButton aria-label="delete" className={classes.icon}>
-                <GetAppIcon fontSize="large" />
-              </IconButton>
               <IconButton
                 aria-label="refresh"
                 className={classes.icon}
@@ -160,7 +157,7 @@ export default function Accounts({ dataUsers }) {
               >
                 <RefreshIcon fontSize="large" />
               </IconButton>
-              <IconButton aria-label="refresh" className={classes.icon}>
+              <IconButton aria-label="delete" className={classes.icon}>
                 <DeleteIcon fontSize="large" />
               </IconButton>
             </div>

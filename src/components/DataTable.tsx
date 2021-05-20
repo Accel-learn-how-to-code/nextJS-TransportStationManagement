@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import { Paper, AppBar, Tab } from "@material-ui/core";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
-import { DataGrid } from "@material-ui/data-grid";
+import {
+  DataGrid,
+  GridToolbarContainer,
+  GridToolbarExport,
+} from "@material-ui/data-grid";
 import Title from "./Title";
 
 const useStyles = makeStyles((theme) => ({
@@ -27,6 +31,14 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
   },
 }));
+
+function CustomToolbar() {
+  return (
+    <GridToolbarContainer>
+      <GridToolbarExport />
+    </GridToolbarContainer>
+  );
+}
 
 export default function DataTable({ dataTable, dataTableColumns }) {
   const classes = useStyles();
@@ -69,6 +81,9 @@ export default function DataTable({ dataTable, dataTableColumns }) {
                 columns={dataTableColumns}
                 // pageSize={5}
                 checkboxSelection
+                components={{
+                  Toolbar: CustomToolbar,
+                }}
               />
             </div>
           </TabPanel>
