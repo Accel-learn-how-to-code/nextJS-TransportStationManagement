@@ -40,14 +40,27 @@ function CustomToolbar() {
   );
 }
 
-export default function DataTable({ dataTable, dataTableColumns }) {
+export default function DataTable({
+  dataTable,
+  dataTableColumns,
+  getSelectedValue,
+}) {
   const classes = useStyles();
   const [value, setValue] = useState("1");
+  const [select, setSelection] = useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
+  const giveSelectedValue = (newSelection) => {
+    setSelection(newSelection.selectionModel);
+  };
+
+  const giveSelectedValueToParent = () => {
+    getSelectedValue(select);
+  };
+  
   return (
     <Paper className={classes.paper}>
       <Title>Users Account</Title>
@@ -84,11 +97,13 @@ export default function DataTable({ dataTable, dataTableColumns }) {
                 components={{
                   Toolbar: CustomToolbar,
                 }}
+                onSelectionModelChange={giveSelectedValue}
               />
             </div>
           </TabPanel>
         ))}
       </TabContext>
+      <h1>Hello</h1>
     </Paper>
   );
 }

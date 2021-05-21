@@ -70,10 +70,10 @@ const columns = [
   //{ field: "DoB", headerName: "Ngày sinh", type: "datetime", width: 100 },
 ];
 
-
 export default function Accounts({ dataUsers }) {
   const classes = useStyles();
   const [allUsers, setAllUsers] = useState(dataUsers);
+  const [selectedUser, setSelectedUser] = useState([]);
   const [refesh, setRefresh] = useState(false);
   const [alertModel, setAlertModel] = useState(false);
 
@@ -122,6 +122,15 @@ export default function Accounts({ dataUsers }) {
       : (setAllUsers(dataUsers), setAlertModel(true));
   };
 
+  const getSelectedValue = (selectedValue) => {
+    //setSelectedUser(selectedValue);
+    console.log(selectedValue);
+  };
+
+  const deleteUser = () => {
+    console.log(selectedUser);
+  };
+
   console.log("rendeerr");
   return (
     <div>
@@ -157,7 +166,11 @@ export default function Accounts({ dataUsers }) {
               >
                 <RefreshIcon fontSize="large" />
               </IconButton>
-              <IconButton aria-label="delete" className={classes.icon}>
+              <IconButton
+                aria-label="delete"
+                className={classes.icon}
+                onClick={deleteUser}
+              >
                 <DeleteIcon fontSize="large" />
               </IconButton>
             </div>
@@ -165,7 +178,11 @@ export default function Accounts({ dataUsers }) {
         </Grid>
       </Paper>
 
-      <DataTable dataTable={dataTable} dataTableColumns={columns}/>
+      <DataTable
+        dataTable={dataTable}
+        dataTableColumns={columns}
+        getSelectedValue={getSelectedValue}
+      />
     </div>
   );
 }
