@@ -18,7 +18,11 @@ const sqlConfig = {
 export async function getAllUsers() {
   try {
     let pool = await sql.connect(sqlConfig);
-    let result = await pool.request().query("select id, UsersName, AccountType, TelNo, Email, Gender from tblAccount");
+    let result = await pool
+      .request()
+      .query(
+        "select id, UsersName, AccountType, TelNo, Email, Gender from tblAccount"
+      );
     return result.recordset;
   } catch (error) {
     console.log(error);
@@ -28,10 +32,10 @@ export async function getAllUsers() {
 export async function deleteUsers(selectedUser) {
   try {
     let pool = await sql.connect(sqlConfig);
-    let result = await pool.request().query("DELETE FROM tblAccount WHERE id IN ("+ 'AC005', 'AC006'+ ")");
-    return result.recordset;
+    await pool
+      .request()
+      .query("DELETE FROM tblAccount WHERE id IN (" + selectedUser + ")");
   } catch (error) {
     console.log(error);
   }
 }
-

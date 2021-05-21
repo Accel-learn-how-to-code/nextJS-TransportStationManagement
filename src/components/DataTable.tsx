@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, forwardRef, useRef, useImperativeHandle } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import { Paper, AppBar, Tab } from "@material-ui/core";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
@@ -54,7 +54,8 @@ export default function DataTable({
   };
 
   const giveSelectedValue = (newSelection) => {
-    setSelection(newSelection.selectionModel);
+    //setSelection(newSelection.selectionModel);
+    getSelectedValue(newSelection.selectionModel);
   };
 
   const giveSelectedValueToParent = () => {
@@ -103,7 +104,6 @@ export default function DataTable({
           </TabPanel>
         ))}
       </TabContext>
-      <h1>Hello</h1>
     </Paper>
   );
 }

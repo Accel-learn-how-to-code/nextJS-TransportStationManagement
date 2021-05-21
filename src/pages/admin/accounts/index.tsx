@@ -14,7 +14,9 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 
 import SearchInput from "../../../components/searchInput";
 import Title from "../../../components/Title";
-import { getAllUsers } from "../../testDB";
+import { getAllUsers, deleteUsers } from "../../testDB";
+
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -123,12 +125,24 @@ export default function Accounts({ dataUsers }) {
   };
 
   const getSelectedValue = (selectedValue) => {
-    //setSelectedUser(selectedValue);
-    console.log(selectedValue);
+    setSelectedUser(selectedValue);
   };
 
-  const deleteUser = () => {
+  const deleteUser = async () => {
     console.log(selectedUser);
+
+    await axios({
+      // headers: {
+      //   "Content-Type": "application/json",
+      // },
+      method: "post",
+      url: "/api/test",
+      data: {
+        selectedUser
+      },
+    })
+      .then((res) => console.log(JSON.stringify(res.data)))
+      .catch((error) => console.log(error));
   };
 
   console.log("rendeerr");
@@ -187,6 +201,11 @@ export default function Accounts({ dataUsers }) {
   );
 }
 Accounts.AdminMenu = AdminMenu;
+
+// export const getStaticProps = async (ctx) => {
+//   const dataUsers = await getAllUsers();
+//   return { props: { dataUsers } };
+// };
 
 export const getServerSideProps = async (ctx) => {
   const dataUsers = await getAllUsers();
