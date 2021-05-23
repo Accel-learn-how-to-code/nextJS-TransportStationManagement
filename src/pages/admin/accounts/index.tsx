@@ -145,7 +145,7 @@ export default function Accounts({ dataUsers }) {
       .catch((error) => console.log(error));
   };
 
-  console.log("rendeerr");
+  console.log("render");
   return (
     <div>
       <Breadcrumbs />
