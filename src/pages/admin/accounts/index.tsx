@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 import { Paper, Grid, Button, IconButton } from "@material-ui/core";
@@ -16,7 +16,7 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 
 import SearchInput from "../../../components/searchInput";
 import Title from "../../../components/Title";
-import { getAllUsers, deleteUsers } from "../../testDB";
+import { getAllUsers, deleteUsers } from "../../../database/testDB";
 import AlertDialog from "../../../components/AlertDialog";
 
 import axios from "axios";
@@ -84,6 +84,8 @@ export default function Accounts({ dataUsers }) {
   const [alertModel, setAlertModel] = useState(false);
   const [deleteAlert, setDeleteAlert] = useState(false);
 
+  const [isRefreshing, setIsRefreshing] = React.useState(false);
+
   //tạo data đưa vào data grid
   const Admin = allUsers.filter((x) => x.AccountType === "AD");
   const ChuXe = allUsers.filter((x) => x.AccountType === "CX");
@@ -111,6 +113,10 @@ export default function Accounts({ dataUsers }) {
     },
   ];
 
+  useEffect(() => {
+    refreshData();
+  }, [dataUsers]);
+
   const refreshData = () => {
     setRefresh(!refesh);
     setAllUsers(dataUsers);
@@ -135,7 +141,9 @@ export default function Accounts({ dataUsers }) {
 
   const refreshDataServer = () => {
     router.replace(router.asPath);
-    refreshData();
+    //refreshData();
+
+    //router.reload()
   };
 
   const setDeleteAlertStatus = () => {
@@ -199,8 +207,8 @@ export default function Accounts({ dataUsers }) {
               <IconButton
                 aria-label="delete"
                 className={classes.icon}
-                //onClick={setDeleteAlertStatus}
-                onClick={deleteUser}
+                onClick={setDeleteAlertStatus}
+                //onClick={deleteUser}
               >
                 <DeleteIcon fontSize="large" />
               </IconButton>

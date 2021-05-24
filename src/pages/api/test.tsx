@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getAllUsers, deleteUsers } from "../testDB";
+import { getAllUsers, deleteUsers } from "../../database/testDB";
 
 export default async function Test(req: NextApiRequest, res: NextApiResponse) {
   const selectedUser = req.body.selectedUser.map(x => `'${x}'`).join()

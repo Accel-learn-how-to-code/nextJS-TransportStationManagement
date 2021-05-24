@@ -1,5 +1,4 @@
 import { UsersMenu } from "../../database/UsersMenu";
-import { getUsers } from "../testDB";
 
 export default function Users({ users }) {
   return (
@@ -12,6 +11,5 @@ export default function Users({ users }) {
 Users.UsersMenuu = UsersMenu;
 
 export const getServerSideProps = async (ctx) => {
-  const users = await getUsers();
-  return { props: { users } };
+  return { props: {} };
 };
