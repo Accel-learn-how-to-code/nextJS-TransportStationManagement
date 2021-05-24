@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useRef, useImperativeHandle } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import { Paper, AppBar, Tab } from "@material-ui/core";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
@@ -49,6 +49,11 @@ export default function DataTable({
   const [value, setValue] = useState("1");
   const [select, setSelection] = useState([]);
 
+  // useEffect(() => {
+  //   setSelection([]); 
+  //   console.log("trigger table")
+  // }, [refesh]);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -61,7 +66,7 @@ export default function DataTable({
   const giveSelectedValueToParent = () => {
     getSelectedValue(select);
   };
-  
+
   return (
     <Paper className={classes.paper}>
       <Title>Users Account</Title>

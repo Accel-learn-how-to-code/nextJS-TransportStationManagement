@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useRouter } from "next/router";
 
 import { Paper, Grid, Button, IconButton } from "@material-ui/core";
@@ -17,6 +17,7 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 import SearchInput from "../../../components/searchInput";
 import Title from "../../../components/Title";
 import { getAllUsers, deleteUsers } from "../../testDB";
+import AlertDialog from "../../../components/AlertDialog";
 
 import axios from "axios";
 
@@ -81,6 +82,7 @@ export default function Accounts({ dataUsers }) {
   const [selectedUser, setSelectedUser] = useState([]);
   const [refesh, setRefresh] = useState(false);
   const [alertModel, setAlertModel] = useState(false);
+  const [deleteAlert, setDeleteAlert] = useState(false);
 
   //tạo data đưa vào data grid
   const Admin = allUsers.filter((x) => x.AccountType === "AD");
@@ -113,6 +115,7 @@ export default function Accounts({ dataUsers }) {
     setRefresh(!refesh);
     setAllUsers(dataUsers);
     setAlertModel(false);
+    console.log("refreshed");
   };
 
   const searchUsersName = (inputValue) => {
@@ -121,7 +124,6 @@ export default function Accounts({ dataUsers }) {
           x.UsersName.toLowerCase().includes(inputValue.toLowerCase())
         )
       : null;
-    console.log("Button Clicked: " + inputValue);
     searchedUsers && searchedUsers.length > 0
       ? (setAllUsers(searchedUsers), setAlertModel(false))
       : (setAllUsers(dataUsers), setAlertModel(true));
@@ -136,10 +138,12 @@ export default function Accounts({ dataUsers }) {
     refreshData();
   };
 
-  const deleteUser = async () => {
-    console.log(selectedUser);
+  const setDeleteAlertStatus = () => {
+    setDeleteAlert(!deleteAlert);
+  };
 
-    await axios({
+  const deleteUser = async () => {
+    const res = await axios({
       // headers: {
       //   "Content-Type": "application/json",
       // },
@@ -148,19 +152,16 @@ export default function Accounts({ dataUsers }) {
       data: {
         selectedUser,
       },
-    })
-      .then((res) => {
-        // Check that our status code is in the 200s,
-        // meaning the request was successful.
-        if (res.status < 300) {
-          refreshDataServer();
-        }
-        console.log(JSON.stringify(res.data));
-      })
-      .catch((error) => console.log(error));
+    });
+
+    // Check that our status code is in the 200s,
+    // meaning the request was successful.
+    if (res.status < 300) {
+      refreshDataServer();
+    }
   };
 
-  console.log("render");
+  //console.log("render");
   return (
     <div>
       <Breadcrumbs />
@@ -198,6 +199,7 @@ export default function Accounts({ dataUsers }) {
               <IconButton
                 aria-label="delete"
                 className={classes.icon}
+                //onClick={setDeleteAlertStatus}
                 onClick={deleteUser}
               >
                 <DeleteIcon fontSize="large" />
@@ -212,15 +214,18 @@ export default function Accounts({ dataUsers }) {
         dataTableColumns={columns}
         getSelectedValue={getSelectedValue}
       />
+
+      <AlertDialog
+        dialogStatus={deleteAlert}
+        title={
+          "Bạn có muốn xóa " + `${selectedUser.length}` + " người dùng không?"
+        }
+        excutedFunction={deleteUser}
+      />
     </div>
   );
 }
 Accounts.AdminMenu = AdminMenu;
-
-// export const getStaticProps = async (ctx) => {
-//   const dataUsers = await getAllUsers();
-//   return { props: { dataUsers } };
-// };
 
 export const getServerSideProps = async (ctx) => {
   const dataUsers = await getAllUsers();
