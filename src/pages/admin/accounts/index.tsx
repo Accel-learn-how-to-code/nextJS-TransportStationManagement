@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useRouter } from "next/router";
+
 import { Paper, Grid, Button, IconButton } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
@@ -74,6 +76,7 @@ const columns = [
 
 export default function Accounts({ dataUsers }) {
   const classes = useStyles();
+  const router = useRouter();
   const [allUsers, setAllUsers] = useState(dataUsers);
   const [selectedUser, setSelectedUser] = useState([]);
   const [refesh, setRefresh] = useState(false);
@@ -128,6 +131,11 @@ export default function Accounts({ dataUsers }) {
     setSelectedUser(selectedValue);
   };
 
+  const refreshDataServer = () => {
+    router.replace(router.asPath);
+    refreshData();
+  };
+
   const deleteUser = async () => {
     console.log(selectedUser);
 
@@ -138,10 +146,17 @@ export default function Accounts({ dataUsers }) {
       method: "post",
       url: "/api/test",
       data: {
-        selectedUser
+        selectedUser,
       },
     })
-      .then((res) => console.log(JSON.stringify(res.data)))
+      .then((res) => {
+        // Check that our status code is in the 200s,
+        // meaning the request was successful.
+        if (res.status < 300) {
+          refreshDataServer();
+        }
+        console.log(JSON.stringify(res.data));
+      })
       .catch((error) => console.log(error));
   };
 
