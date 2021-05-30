@@ -1,6 +1,6 @@
 import sql from "mssql";
 
-const sqlConfig = {
+export const sqlConfig = {
   user: "sa",
   password: "123456",
   database: "QLBenXe",

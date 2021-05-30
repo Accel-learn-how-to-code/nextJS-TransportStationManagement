@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import Router from "next/router";
 
 import { Paper, Grid, Button, IconButton } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
@@ -20,6 +21,7 @@ import { getAllUsers, deleteUsers } from "../../../database/testDB";
 import AlertDialog from "../../../components/AlertDialog";
 
 import axios from "axios";
+import { ChatSharp } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -141,9 +143,6 @@ export default function Accounts({ dataUsers }) {
 
   const refreshDataServer = () => {
     router.replace(router.asPath);
-    //refreshData();
-
-    //router.reload()
   };
 
   const setDeleteAlertStatus = () => {
@@ -152,9 +151,9 @@ export default function Accounts({ dataUsers }) {
 
   const deleteUser = async () => {
     const res = await axios({
-      // headers: {
-      //   "Content-Type": "application/json",
-      // },
+      headers: {
+        "Content-Type": "application/json",
+      },
       method: "post",
       url: "/api/test",
       data: {
@@ -169,7 +168,6 @@ export default function Accounts({ dataUsers }) {
     }
   };
 
-  //console.log("render");
   return (
     <div>
       <Breadcrumbs />
@@ -236,6 +234,57 @@ export default function Accounts({ dataUsers }) {
 Accounts.AdminMenu = AdminMenu;
 
 export const getServerSideProps = async (ctx) => {
-  const dataUsers = await getAllUsers();
+  //const dataUsers = await getAllUsers();
+
+  const cookie = ctx.req?.headers.cookie;
+  // const result = await fetch("http://localhost:3000/api/admin/accounts", {
+  //   headers: {
+  //     cookie: cookie!,
+  //   },
+  // });
+
+  // if (result.status === 401 && !ctx.req) {
+  //   Router.replace("/");
+  //   return;
+  // }
+
+  // //for server side
+  // if (result.status === 401 && ctx.req) {
+  //   ctx.res?.writeHead(302, {
+  //     Location: "http://localhost:3000/",
+  //   });
+  //   ctx.res?.end();
+  //   return;
+  // }
+
+  // const dataUsers = await result.json();
+
+  
+  const dataUsers = await axios({
+    method: "GET",
+    url: "http://localhost:3000/api/admin/accounts",
+    withCredentials: true,
+    headers: {
+      Cookie: cookie || null,
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => res.data)
+    .catch((err) => {
+      if (err.response.status === 401 && !ctx.req) {
+        Router.replace("/");
+        return;
+      }
+
+      //server-side
+      if (err.response.status === 401 && ctx.req) {
+        ctx.res?.writeHead(302, {
+          Location: "/",
+        });
+        ctx.res?.end();
+        return;
+      }
+    });
+
   return { props: { dataUsers } };
 };
