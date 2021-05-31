@@ -1,4 +1,6 @@
 import { UsersMenu } from "../../database/UsersMenu";
+import { secret } from "../../../api/secret";
+import { verify } from "jsonwebtoken";
 
 export default function Users({ users }) {
   return (
@@ -8,8 +10,10 @@ export default function Users({ users }) {
     </div>
   );
 }
-Users.UsersMenuu = UsersMenu;
+Users.UsersMenu = UsersMenu;
 
 export const getServerSideProps = async (ctx) => {
-  return { props: {} };
+  const { cookies } = ctx.req;
+  var decoded = verify(cookies.auth, secret);
+  return { props: { users: decoded } };
 };

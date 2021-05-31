@@ -14,6 +14,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
 import axios from "axios";
+import Router from "next/router";
 
 function Copyright() {
   return (
@@ -63,7 +64,7 @@ export default function SignIn() {
   };
 
   const submitAccount = async () => {
-    const resp = await axios({
+    const result = await axios({
       method: "POST",
       data: {
         email: email!,
@@ -71,8 +72,14 @@ export default function SignIn() {
       },
       url: "http://localhost:3000/api/login",
     });
-    console.log(resp);
-    console.log(email + ": " + pass);
+
+    const accountType = result.data;
+    if (accountType === "AD") {
+      Router.replace("/admin");
+    }
+    if (accountType === "NX") {
+      Router.replace("/users");
+    }
   };
 
   return (

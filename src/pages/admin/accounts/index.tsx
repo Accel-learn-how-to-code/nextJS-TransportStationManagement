@@ -22,6 +22,8 @@ import AlertDialog from "../../../components/AlertDialog";
 
 import axios from "axios";
 import { ChatSharp } from "@material-ui/icons";
+import { secret } from "../../../../api/secret";
+import { verify } from "jsonwebtoken";
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -236,7 +238,14 @@ Accounts.AdminMenu = AdminMenu;
 export const getServerSideProps = async (ctx) => {
   //const dataUsers = await getAllUsers();
 
+  //lấy cookie nhưng ở dạng string auth=abc123
   const cookie = ctx.req?.headers.cookie;
+  //lấy cookie nhưng ở dạng object {auth: abc123}
+  const { cookies } = ctx.req;
+  
+  var decoded = verify(cookies.auth, secret);
+
+  //console.log("2" + decoded2)
   // const result = await fetch("http://localhost:3000/api/admin/accounts", {
   //   headers: {
   //     cookie: cookie!,
@@ -259,7 +268,14 @@ export const getServerSideProps = async (ctx) => {
 
   // const dataUsers = await result.json();
 
-  
+  if (decoded.accountType !== "AD" && ctx.req) {
+    ctx.res?.writeHead(302, {
+      Location: "http://localhost:3000/",
+    });
+    ctx.res?.end();
+    return;
+  }
+
   const dataUsers = await axios({
     method: "GET",
     url: "http://localhost:3000/api/admin/accounts",

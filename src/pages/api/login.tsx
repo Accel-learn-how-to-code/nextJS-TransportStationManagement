@@ -17,7 +17,11 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
     const person = result.recordset[0];
     compare(req.body.pass, person.pass, function (err, result) {
       if (!err && result) {
-        const claims = { sub: person.id, myPersonEmail: person.Email };
+        const claims = {
+          sub: person.id,
+          myPersonEmail: person.Email,
+          accountType: person.AccountType,
+        };
         const jwt = sign(claims, secret, { expiresIn: "1h" });
 
         res.setHeader(
@@ -30,7 +34,7 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
             path: "/",
           })
         );
-        res.json({ message: "Welcome back to the app~" });
+        res.json(person.AccountType);
       } else {
         res.json("something wrong here~");
       }
