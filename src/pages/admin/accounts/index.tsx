@@ -2,7 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Router from "next/router";
 
-import { Paper, Grid, Button, IconButton } from "@material-ui/core";
+import {
+  Paper,
+  Grid,
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+} from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
 import { DataGrid, GridColDef, GridCellParams } from "@material-ui/data-grid";
@@ -23,6 +30,7 @@ import AlertDialog from "../../../components/AlertDialog";
 
 import axios from "axios";
 import { ChatSharp } from "@material-ui/icons";
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { secret } from "../../../../api/secret";
 import { verify } from "jsonwebtoken";
 import Link from "next/link";
@@ -71,35 +79,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const columns: GridColDef[] = [
-  { field: "id", headerName: "ID", width: 100 },
-  { field: "UsersName", headerName: "Name", width: 200 },
-  { field: "AccountType", headerName: "Type", width: 90 },
-  { field: "TelNo", headerName: "Phone", width: 130 },
-  { field: "Email", headerName: "Email", width: 250 },
-  { field: "Gender", headerName: "Gender", width: 130 },
-  //{ field: "DoB", headerName: "Ngày sinh", type: "datetime", width: 100 },
-  {
-    field: " ",
-    headerName: " ",
-    sortable: false,
-    renderCell: (params: GridCellParams) => (
-      <strong>
-        <Button
-          variant="contained"
-          color="primary"
-          size="small"
-          style={{ marginLeft: 16 }}
-        >
-          <Link href={`/admin/accounts/details?id=${params.row.id}`}>
-            <a style={{ textDecoration: "none", color: "#fff" }}>UPDATE</a>
-          </Link>
-        </Button>
-      </strong>
-    ),
-  },
-];
-
 export default function Accounts({ dataUsers }) {
   const classes = useStyles();
   const router = useRouter();
@@ -108,7 +87,6 @@ export default function Accounts({ dataUsers }) {
   const [refesh, setRefresh] = useState(false);
   const [alertModel, setAlertModel] = useState(false);
   const [deleteAlert, setDeleteAlert] = useState(false);
-
   const [isRefreshing, setIsRefreshing] = React.useState(false);
 
   //tạo data đưa vào data grid
@@ -135,6 +113,34 @@ export default function Accounts({ dataUsers }) {
       value: "4",
       label: "Nhà Xe",
       data: NhaXe,
+    },
+  ];
+
+  const columns: GridColDef[] = [
+    { field: "id", headerName: "ID", width: 100 },
+    { field: "UsersName", headerName: "Name", width: 200 },
+    { field: "AccountType", headerName: "Type", width: 90 },
+    { field: "TelNo", headerName: "Phone", width: 130 },
+    { field: "Email", headerName: "Email", width: 250 },
+    { field: "Gender", headerName: "Gender", width: 100 },
+    //{ field: "DoB", headerName: "Ngày sinh", type: "datetime", width: 100 },
+    {
+      field: "Action",
+      headerName: "Action",
+      sortable: false,
+      width: 130,
+      renderCell: (params: GridCellParams) => (
+        <strong>
+          <Button variant="outlined" color="primary" size="small">
+            <Link href={`/admin/accounts/details?id=${params.row.id}`}>
+              <a style={{ textDecoration: "none" }}>UPDATE</a>
+            </Link>
+          </Button>
+          <IconButton aria-label="delete" onClick={setDeleteAlertStatus}>
+            <HighlightOffIcon fontSize="small" />
+          </IconButton>
+        </strong>
+      ),
     },
   ];
 
