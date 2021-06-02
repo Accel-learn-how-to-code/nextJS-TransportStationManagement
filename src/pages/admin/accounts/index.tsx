@@ -2,14 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Router from "next/router";
 
-import {
-  Paper,
-  Grid,
-  Button,
-  IconButton,
-  Menu,
-  MenuItem,
-} from "@material-ui/core";
+import { Paper, Grid, Button, IconButton } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
 import { DataGrid, GridColDef, GridCellParams } from "@material-ui/data-grid";
@@ -21,15 +14,12 @@ import Breadcrumbs from "../../../components/Breadcrumbs";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 import RefreshIcon from "@material-ui/icons/Refresh";
-import GetAppIcon from "@material-ui/icons/GetApp";
 
 import SearchInput from "../../../components/searchInput";
 import Title from "../../../components/Title";
-import { getAllUsers, deleteUsers } from "../../../database/testDB";
 import AlertDialog from "../../../components/AlertDialog";
 
 import axios from "axios";
-import { ChatSharp } from "@material-ui/icons";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import { secret } from "../../../../api/secret";
 import { verify } from "jsonwebtoken";
@@ -154,40 +144,6 @@ export default function Accounts({ dataUsers }) {
             <HighlightOffIcon fontSize="small" />
           </IconButton>
         </strong>
-        // <div>
-        //   <Button
-        //     aria-controls="simple-menu"
-        //     //aria-haspopup="true"
-        //     onClick={handleMenuClick}
-        //   >
-        //     Action
-        //   </Button>
-        //   <Menu
-        //     id="simple-menu"
-        //     anchorEl={anchorEl}
-        //     keepMounted
-        //     open={Boolean(anchorEl)}
-        //     onClose={handleMenuClose}
-        //   >
-        //     <MenuItem onClick={handleMenuClose}>
-        //       <Link href={`/admin/accounts/details?id=${params.row.id}`}>
-        //         <div style={{ textDecoration: "none", font: "#000000DE" }}>
-        //           Xem chi tiết
-        //         </div>
-        //       </Link>
-        //     </MenuItem>
-        //     <MenuItem onClick={handleMenuClose}>Sửa tài khoản</MenuItem>
-        //     <MenuItem
-        //       onClick={() => {
-        //         onClickDeleteDataGridCeil();
-        //         setSelectedUser([params.row.id]);
-        //       }}
-        //     >
-        //       Xóa tài khoản
-        //     </MenuItem>
-        //     <MenuItem onClick={handleMenuClose}>Close</MenuItem>
-        //   </Menu>
-        // </div>
       ),
     },
   ];

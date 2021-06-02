@@ -47,7 +47,6 @@ export default function DataTable({
 }) {
   const classes = useStyles();
   const [value, setValue] = useState("1");
-  const [select, setSelection] = useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -55,10 +54,6 @@ export default function DataTable({
 
   const giveSelectedValue = (newSelection) => {
     getSelectedValue(newSelection.selectionModel);
-  };
-
-  const giveSelectedValueToParent = () => {
-    getSelectedValue(select);
   };
 
   return (
