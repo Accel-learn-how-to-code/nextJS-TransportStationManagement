@@ -30,7 +30,7 @@ import AlertDialog from "../../../components/AlertDialog";
 
 import axios from "axios";
 import { ChatSharp } from "@material-ui/icons";
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import { secret } from "../../../../api/secret";
 import { verify } from "jsonwebtoken";
 import Link from "next/link";
@@ -88,7 +88,15 @@ export default function Accounts({ dataUsers }) {
   const [alertModel, setAlertModel] = useState(false);
   const [deleteAlert, setDeleteAlert] = useState(false);
   const [isRefreshing, setIsRefreshing] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
   //tạo data đưa vào data grid
   const Admin = allUsers.filter((x) => x.AccountType === "AD");
   const ChuXe = allUsers.filter((x) => x.AccountType === "CX");
@@ -136,10 +144,50 @@ export default function Accounts({ dataUsers }) {
               <a style={{ textDecoration: "none" }}>UPDATE</a>
             </Link>
           </Button>
-          <IconButton aria-label="delete" onClick={setDeleteAlertStatus}>
+          <IconButton
+            aria-label="delete"
+            onClick={() => {
+              setSelectedUser([params.row.id]);
+              onClickDeleteDataGridCeil();
+            }}
+          >
             <HighlightOffIcon fontSize="small" />
           </IconButton>
         </strong>
+        // <div>
+        //   <Button
+        //     aria-controls="simple-menu"
+        //     //aria-haspopup="true"
+        //     onClick={handleMenuClick}
+        //   >
+        //     Action
+        //   </Button>
+        //   <Menu
+        //     id="simple-menu"
+        //     anchorEl={anchorEl}
+        //     keepMounted
+        //     open={Boolean(anchorEl)}
+        //     onClose={handleMenuClose}
+        //   >
+        //     <MenuItem onClick={handleMenuClose}>
+        //       <Link href={`/admin/accounts/details?id=${params.row.id}`}>
+        //         <div style={{ textDecoration: "none", font: "#000000DE" }}>
+        //           Xem chi tiết
+        //         </div>
+        //       </Link>
+        //     </MenuItem>
+        //     <MenuItem onClick={handleMenuClose}>Sửa tài khoản</MenuItem>
+        //     <MenuItem
+        //       onClick={() => {
+        //         onClickDeleteDataGridCeil();
+        //         setSelectedUser([params.row.id]);
+        //       }}
+        //     >
+        //       Xóa tài khoản
+        //     </MenuItem>
+        //     <MenuItem onClick={handleMenuClose}>Close</MenuItem>
+        //   </Menu>
+        // </div>
       ),
     },
   ];
@@ -195,6 +243,11 @@ export default function Accounts({ dataUsers }) {
     if (res.status < 300) {
       refreshDataServer();
     }
+  };
+
+  const onClickDeleteDataGridCeil = async () => {
+    setDeleteAlertStatus();
+    handleMenuClose();
   };
 
   return (

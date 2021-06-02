@@ -49,17 +49,11 @@ export default function DataTable({
   const [value, setValue] = useState("1");
   const [select, setSelection] = useState([]);
 
-  // useEffect(() => {
-  //   setSelection([]); 
-  //   console.log("trigger table")
-  // }, [refesh]);
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   const giveSelectedValue = (newSelection) => {
-    //setSelection(newSelection.selectionModel);
     getSelectedValue(newSelection.selectionModel);
   };
 
@@ -100,6 +94,7 @@ export default function DataTable({
                 columns={dataTableColumns}
                 // pageSize={5}
                 checkboxSelection
+                disableSelectionOnClick
                 components={{
                   Toolbar: CustomToolbar,
                 }}
