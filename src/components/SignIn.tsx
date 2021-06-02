@@ -1,17 +1,20 @@
 import React, { useState } from "react";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Link,
+  Grid,
+  Box,
+  Typography,
+  Container,
+} from "@material-ui/core";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Alert from "@material-ui/lab/Alert";
 
 import axios from "axios";
 import Router from "next/router";
@@ -54,6 +57,7 @@ export default function SignIn() {
   const classes = useStyles();
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
+  const [alert, setAlert] = useState("");
 
   const onChangeEmail = (event) => {
     setEmail(event.target.value);
@@ -71,15 +75,19 @@ export default function SignIn() {
         pass: pass!,
       },
       url: "http://localhost:3000/api/login",
-    });
-
-    const accountType = result.data;
-    if (accountType === "AD") {
-      Router.replace("/admin");
-    }
-    if (accountType === "NX") {
-      Router.replace("/users");
-    }
+    })
+      .then((res) => {
+        const accountType = res.data;
+        if (accountType === "AD") {
+          Router.replace("/admin");
+        }
+        if (accountType === "NX") {
+          Router.replace("/users");
+        }
+      })
+      .catch((err) => {
+        setAlert("Tên đăng nhập hoặc mật khẩu không đúng!");
+      });
   };
 
   return (
@@ -99,6 +107,11 @@ export default function SignIn() {
           </Grid>
         </Grid>
         <form className={classes.form} noValidate>
+          {alert ? (
+            <Alert severity="error">
+              {alert}
+            </Alert>
+          ) : null}
           <TextField
             variant="outlined"
             margin="normal"

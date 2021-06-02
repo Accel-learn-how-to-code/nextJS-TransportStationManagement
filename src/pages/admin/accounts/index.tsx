@@ -5,6 +5,7 @@ import Router from "next/router";
 import { Paper, Grid, Button, IconButton } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
+import { DataGrid, GridColDef, GridCellParams } from "@material-ui/data-grid";
 
 import { AdminMenu } from "../../../database/AdminMenu";
 import DataTable from "../../../components/DataTable";
@@ -24,6 +25,7 @@ import axios from "axios";
 import { ChatSharp } from "@material-ui/icons";
 import { secret } from "../../../../api/secret";
 import { verify } from "jsonwebtoken";
+import Link from "next/link";
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -69,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const columns = [
+const columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 100 },
   { field: "UsersName", headerName: "Name", width: 200 },
   { field: "AccountType", headerName: "Type", width: 90 },
@@ -77,6 +79,25 @@ const columns = [
   { field: "Email", headerName: "Email", width: 250 },
   { field: "Gender", headerName: "Gender", width: 130 },
   //{ field: "DoB", headerName: "Ngày sinh", type: "datetime", width: 100 },
+  {
+    field: " ",
+    headerName: " ",
+    sortable: false,
+    renderCell: (params: GridCellParams) => (
+      <strong>
+        <Button
+          variant="contained"
+          color="primary"
+          size="small"
+          style={{ marginLeft: 16 }}
+        >
+          <Link href={`/admin/accounts/details?id=${params.row.id}`}>
+            <a style={{ textDecoration: "none", color: "#fff" }}>UPDATE</a>
+          </Link>
+        </Button>
+      </strong>
+    ),
+  },
 ];
 
 export default function Accounts({ dataUsers }) {
@@ -233,40 +254,14 @@ export default function Accounts({ dataUsers }) {
     </div>
   );
 }
-Accounts.AdminMenu = AdminMenu;
 
 export const getServerSideProps = async (ctx) => {
-  //const dataUsers = await getAllUsers();
-
   //lấy cookie nhưng ở dạng string auth=abc123
   const cookie = ctx.req?.headers.cookie;
   //lấy cookie nhưng ở dạng object {auth: abc123}
   const { cookies } = ctx.req;
-  
+
   var decoded = verify(cookies.auth, secret);
-
-  //console.log("2" + decoded2)
-  // const result = await fetch("http://localhost:3000/api/admin/accounts", {
-  //   headers: {
-  //     cookie: cookie!,
-  //   },
-  // });
-
-  // if (result.status === 401 && !ctx.req) {
-  //   Router.replace("/");
-  //   return;
-  // }
-
-  // //for server side
-  // if (result.status === 401 && ctx.req) {
-  //   ctx.res?.writeHead(302, {
-  //     Location: "http://localhost:3000/",
-  //   });
-  //   ctx.res?.end();
-  //   return;
-  // }
-
-  // const dataUsers = await result.json();
 
   if (decoded.accountType !== "AD" && ctx.req) {
     ctx.res?.writeHead(302, {
@@ -304,3 +299,5 @@ export const getServerSideProps = async (ctx) => {
 
   return { props: { dataUsers } };
 };
+
+Accounts.AdminMenu = AdminMenu;
