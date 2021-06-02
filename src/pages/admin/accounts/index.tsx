@@ -178,7 +178,7 @@ export default function Accounts({ dataUsers }) {
         "Content-Type": "application/json",
       },
       method: "post",
-      url: "/api/test",
+      url: "/api/admin/accounts/delete",
       data: {
         selectedUser,
       },
