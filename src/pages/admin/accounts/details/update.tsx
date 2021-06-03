@@ -1,11 +1,11 @@
 import { AdminMenu } from "../../../../database/AdminMenu";
 
 export default function User({ user }) {
-  return <div>HEllo Detail {user}</div>;
+  return <div>HEllo Update {user}</div>;
 }
 
 export const getServerSideProps = async (ctx) => {
-  const id  = ctx.query.id;
+  const id = ctx.query.id;
   return { props: { user: id } };
 };
 

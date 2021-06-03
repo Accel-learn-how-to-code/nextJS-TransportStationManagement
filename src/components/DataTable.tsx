@@ -87,8 +87,8 @@ export default function DataTable({
               <DataGrid
                 rows={element.data}
                 columns={dataTableColumns}
-                // pageSize={5}
-                checkboxSelection
+                //pageSize={5}
+                //checkboxSelection
                 disableSelectionOnClick
                 components={{
                   Toolbar: CustomToolbar,

@@ -2,17 +2,23 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Router from "next/router";
 
-import { Paper, Grid, Button, IconButton } from "@material-ui/core";
+import {
+  Paper,
+  Grid,
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+} from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
-import { DataGrid, GridColDef, GridCellParams } from "@material-ui/data-grid";
+import { GridColDef, GridCellParams } from "@material-ui/data-grid";
 
 import { AdminMenu } from "../../../database/AdminMenu";
 import DataTable from "../../../components/DataTable";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 
 import AddIcon from "@material-ui/icons/Add";
-import DeleteIcon from "@material-ui/icons/Delete";
 import RefreshIcon from "@material-ui/icons/Refresh";
 
 import SearchInput from "../../../components/searchInput";
@@ -20,7 +26,6 @@ import Title from "../../../components/Title";
 import AlertDialog from "../../../components/AlertDialog";
 
 import axios from "axios";
-import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import { secret } from "../../../../api/secret";
 import { verify } from "jsonwebtoken";
 import Link from "next/link";
@@ -80,8 +85,9 @@ export default function Accounts({ dataUsers }) {
   const [isRefreshing, setIsRefreshing] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleMenuClick = (event) => {
+  const handleMenuClick = (event, id: string) => {
     setAnchorEl(event.currentTarget);
+    setSelectedUser([id]);
   };
 
   const handleMenuClose = () => {
@@ -124,26 +130,49 @@ export default function Accounts({ dataUsers }) {
     //{ field: "DoB", headerName: "Ngày sinh", type: "datetime", width: 100 },
     {
       field: "Action",
-      headerName: "Action",
+      headerName: " ",
       sortable: false,
       width: 130,
       renderCell: (params: GridCellParams) => (
-        <strong>
-          <Button variant="outlined" color="primary" size="small">
-            <Link href={`/admin/accounts/details?id=${params.row.id}`}>
-              <a style={{ textDecoration: "none" }}>UPDATE</a>
-            </Link>
-          </Button>
-          <IconButton
-            aria-label="delete"
-            onClick={() => {
-              setSelectedUser([params.row.id]);
-              onClickDeleteDataGridCeil();
+        <div>
+          <Button
+            variant="outlined"
+            color="primary"
+            size="small"
+            aria-controls="usersMenu"
+            aria-haspopup="true"
+            onClick={(event) => {
+              handleMenuClick(event, params.row.id);
             }}
           >
-            <HighlightOffIcon fontSize="small" />
-          </IconButton>
-        </strong>
+            Action
+          </Button>
+          <Menu
+            elevation={1}
+            id="usersMenu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+          >
+            <MenuItem onClick={handleMenuClose}>
+              <Link href={`/admin/accounts/details?id=${selectedUser}`}>
+                <div style={{ textDecoration: "none", font: "#000000DE" }}>
+                  Xem chi tiết
+                </div>
+              </Link>
+            </MenuItem>
+            <MenuItem onClick={handleMenuClose}>
+              <Link href={`/admin/accounts/details/update?id=${selectedUser}`}>
+                <div style={{ textDecoration: "none", font: "#000000DE" }}>
+                  Sửa thông tin
+                </div>
+              </Link>
+            </MenuItem>
+            <MenuItem onClick={setDeleteAlertStatus}>Xóa tài khoản</MenuItem>
+            <MenuItem onClick={handleMenuClose}>Close</MenuItem>
+          </Menu>
+        </div>
       ),
     },
   ];
@@ -180,6 +209,7 @@ export default function Accounts({ dataUsers }) {
 
   const setDeleteAlertStatus = () => {
     setDeleteAlert(!deleteAlert);
+    setAnchorEl(null);
   };
 
   const deleteUser = async () => {
@@ -199,11 +229,6 @@ export default function Accounts({ dataUsers }) {
     if (res.status < 300) {
       refreshDataServer();
     }
-  };
-
-  const onClickDeleteDataGridCeil = async () => {
-    setDeleteAlertStatus();
-    handleMenuClose();
   };
 
   return (
@@ -231,7 +256,11 @@ export default function Accounts({ dataUsers }) {
                 className={classes.button}
                 startIcon={<AddIcon />}
               >
-                Add New
+                <Link href={`/admin/accounts/create`}>
+                  <div style={{ textDecoration: "none", font: "#000000DE" }}>
+                    Add New
+                  </div>
+                </Link>
               </Button>
               <IconButton
                 aria-label="refresh"
@@ -239,14 +268,6 @@ export default function Accounts({ dataUsers }) {
                 onClick={refreshData}
               >
                 <RefreshIcon fontSize="large" />
-              </IconButton>
-              <IconButton
-                aria-label="delete"
-                className={classes.icon}
-                onClick={setDeleteAlertStatus}
-                //onClick={deleteUser}
-              >
-                <DeleteIcon fontSize="large" />
               </IconButton>
             </div>
           </Grid>
@@ -262,7 +283,7 @@ export default function Accounts({ dataUsers }) {
       <AlertDialog
         dialogStatus={deleteAlert}
         title={
-          "Bạn có muốn xóa " + `${selectedUser.length}` + " người dùng không?"
+          "Bạn có muốn xóa người dùng ID: " + `${selectedUser}` + " không?"
         }
         excutedFunction={deleteUser}
       />
