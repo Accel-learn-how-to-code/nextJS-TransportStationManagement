@@ -22,7 +22,11 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
           myPersonEmail: person.Email,
           accountType: person.AccountType,
         };
-        const jwt = sign(claims, secret, { expiresIn: "1h" });
+        const jwt = sign(
+          claims,
+          secret
+          // { expiresIn: "1h" }
+        );
 
         res.setHeader(
           "Set-Cookie",

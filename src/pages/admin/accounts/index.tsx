@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Router from "next/router";
-
+import Link from "next/link";
 import {
   Paper,
   Grid,
@@ -13,22 +13,19 @@ import {
 import { Alert } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
 import { GridColDef, GridCellParams } from "@material-ui/data-grid";
+import AddIcon from "@material-ui/icons/Add";
+import RefreshIcon from "@material-ui/icons/Refresh";
 
 import { AdminMenu } from "../../../database/AdminMenu";
 import DataTable from "../../../components/DataTable";
 import Breadcrumbs from "../../../components/Breadcrumbs";
-
-import AddIcon from "@material-ui/icons/Add";
-import RefreshIcon from "@material-ui/icons/Refresh";
-
 import SearchInput from "../../../components/searchInput";
 import Title from "../../../components/Title";
 import AlertDialog from "../../../components/AlertDialog";
+import { secret } from "../../../../api/secret";
 
 import axios from "axios";
-import { secret } from "../../../../api/secret";
 import { verify } from "jsonwebtoken";
-import Link from "next/link";
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -82,17 +79,19 @@ export default function Accounts({ dataUsers }) {
   const [refesh, setRefresh] = useState(false);
   const [alertModel, setAlertModel] = useState(false);
   const [deleteAlert, setDeleteAlert] = useState(false);
-  const [isRefreshing, setIsRefreshing] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleMenuClick = (event, id: string) => {
-    setAnchorEl(event.currentTarget);
-    setSelectedUser([id]);
-  };
+  const breadcumbData = [
+    {
+      path: "/admin",
+      pathName: "Home",
+    },
+    {
+      path: "/admin/accounts",
+      pathName: "Quản lý tài khoản",
+    },
+  ];
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
   //tạo data đưa vào data grid
   const Admin = allUsers.filter((x) => x.AccountType === "AD");
   const ChuXe = allUsers.filter((x) => x.AccountType === "CX");
@@ -181,6 +180,15 @@ export default function Accounts({ dataUsers }) {
     refreshData();
   }, [dataUsers]);
 
+  const handleMenuClick = (event, id: string) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedUser([id]);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
   const refreshData = () => {
     setRefresh(!refesh);
     setAllUsers(dataUsers);
@@ -233,7 +241,7 @@ export default function Accounts({ dataUsers }) {
 
   return (
     <div>
-      <Breadcrumbs />
+      <Breadcrumbs breadcumbData={breadcumbData} />
       {alertModel ? (
         <div className={classes.alert}>
           <Alert severity="error">

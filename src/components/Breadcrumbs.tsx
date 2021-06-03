@@ -1,23 +1,23 @@
-import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import Link from '@material-ui/core/Link';
+import React from "react";
+import Typography from "@material-ui/core/Typography";
+import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+import Link from "@material-ui/core/Link";
+//import Link from "next/link";
 
-function handleClick(event) {
-  event.preventDefault();
-  console.info('You clicked a breadcrumb.');
-}
-
-export default function SimpleBreadcrumbs() {
+export default function SimpleBreadcrumbs({ breadcumbData }) {
   return (
     <Breadcrumbs aria-label="breadcrumb">
-      <Link color="inherit" href="/" onClick={handleClick}>
-        Material-UI
-      </Link>
-      <Link color="inherit" href="/getting-started/installation/" onClick={handleClick}>
-        Core
-      </Link>
-      <Typography color="textPrimary">Breadcrumb</Typography>
+      {breadcumbData.map((item, index) =>
+        index !== breadcumbData.length - 1 ? (
+          <Link color="inherit" href={item.path} key={index}>
+            {item.pathName}
+          </Link>
+        ) : (
+          <Typography color="textPrimary" key={index}>
+            {item.pathName}
+          </Typography>
+        )
+      )}
     </Breadcrumbs>
   );
 }
