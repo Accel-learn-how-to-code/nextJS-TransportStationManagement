@@ -88,7 +88,7 @@ export default function DataTable({
                 rows={element.data}
                 columns={dataTableColumns}
                 //pageSize={5}
-                //checkboxSelection
+                checkboxSelection
                 disableSelectionOnClick
                 components={{
                   Toolbar: CustomToolbar,

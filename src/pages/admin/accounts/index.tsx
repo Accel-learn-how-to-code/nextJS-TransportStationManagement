@@ -87,7 +87,6 @@ export default function Accounts({ dataUsers }) {
       pathName: "Home",
     },
     {
-      path: "/admin/accounts",
       pathName: "Quản lý tài khoản",
     },
   ];
@@ -211,10 +210,6 @@ export default function Accounts({ dataUsers }) {
     setSelectedUser(selectedValue);
   };
 
-  const refreshDataServer = () => {
-    router.replace(router.asPath);
-  };
-
   const setDeleteAlertStatus = () => {
     setDeleteAlert(!deleteAlert);
     setAnchorEl(null);
@@ -235,7 +230,7 @@ export default function Accounts({ dataUsers }) {
     // Check that our status code is in the 200s,
     // meaning the request was successful.
     if (res.status < 300) {
-      refreshDataServer();
+      router.replace(router.asPath);
     }
   };
 
