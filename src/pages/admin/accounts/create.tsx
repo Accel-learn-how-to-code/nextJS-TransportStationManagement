@@ -13,12 +13,16 @@ import {
   Select,
   MenuItem,
   FormControl,
+  Paper,
 } from "@material-ui/core";
 import { Field, Form, Formik, FieldArray } from "formik";
 import { CheckboxWithLabel, TextField } from "formik-material-ui";
 import { AdminMenu } from "../../../database/AdminMenu";
 import React, { Children, useState } from "react";
 import { mixed, number, object, array, string } from "yup";
+
+import Title from "../../../components/Title";
+import Breadcrumbs from "../../../components/Breadcrumbs";
 
 const useStyles = makeStyles((theme) => ({
   noWrap: {
@@ -41,11 +45,31 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "flex-end",
   },
+  grid: {
+    marginTop: 20,
+    paddingTop: 15,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
 }));
 
 const sleep = (time) => new Promise((acc) => setTimeout(acc, time));
 
 const emptyDonation = { institution: "", percentage: 0 };
+
+const breadcumbData = [
+  {
+    path: "/admin",
+    pathName: "Home",
+  },
+  {
+    path: "/admin/accounts",
+    pathName: "Quản lý tài khoản",
+  },
+  {
+    pathName: "Tạo tài khoản",
+  },
+];
 
 export default function CreateUser() {
   const [completed, setCompleted] = useState(false);
@@ -72,8 +96,10 @@ export default function CreateUser() {
 
   const steps = ["Thông tin người dùng", "Thông tin xe", "Hoàn tất đăng ký"];
   return (
-    <Card>
-      <CardContent>
+    <>
+      <Breadcrumbs breadcumbData={breadcumbData} />
+      <Paper elevation={2} className={classes.grid}>
+        <Title>Tạo tài khoản người dùng</Title>
         <Formik
           initialValues={{
             UsersName: "",
@@ -124,13 +150,17 @@ export default function CreateUser() {
                   </Step>
                 ))}
               </Stepper>
+
               {step === 0 && (
                 <Box>
+                  <Typography variant="h6" gutterBottom>
+                    {steps[step]}
+                  </Typography>
                   <Grid container spacing={2}>
                     <Grid
                       item
                       container
-                      spacing={2}
+                      spacing={3}
                       className={classes.flexFull}
                     >
                       <Grid item xs={12} sm={4}>
@@ -164,7 +194,7 @@ export default function CreateUser() {
                     <Grid
                       item
                       container
-                      spacing={2}
+                      spacing={3}
                       className={classes.flexFull}
                     >
                       <Grid item xs={12} sm={3}>
@@ -211,6 +241,9 @@ export default function CreateUser() {
 
               {step === 1 && (
                 <Box>
+                  <Typography variant="h6" gutterBottom>
+                    {steps[step]}
+                  </Typography>
                   <FieldArray name="donations">
                     {({ push, remove }) => (
                       <React.Fragment>
@@ -288,6 +321,9 @@ export default function CreateUser() {
 
               {step === 2 && (
                 <Box>
+                  <Typography variant="h6" gutterBottom>
+                    {steps[step]}
+                  </Typography>
                   {Object.keys(errors).length >= 1 ? (
                     <Typography color="error">ERROR</Typography>
                   ) : null}
@@ -295,7 +331,7 @@ export default function CreateUser() {
                 </Box>
               )}
 
-              <Grid container spacing={1}>
+              <Grid container spacing={3}>
                 {step > 0 ? (
                   <Grid item>
                     <Button
@@ -340,8 +376,8 @@ export default function CreateUser() {
             </Form>
           )}
         </Formik>
-      </CardContent>
-    </Card>
+      </Paper>
+    </>
   );
 }
 
