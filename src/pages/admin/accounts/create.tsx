@@ -15,6 +15,7 @@ import {
   FormControl,
   Paper,
 } from "@material-ui/core";
+import Link from "next/link";
 import { Field, Form, Formik, FieldArray } from "formik";
 import { CheckboxWithLabel, TextField } from "formik-material-ui";
 import { AdminMenu } from "../../../database/AdminMenu";
@@ -47,10 +48,13 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "flex-end",
   },
   grid: {
+    margin: "auto",
     marginTop: 20,
-    paddingTop: 15,
-    paddingLeft: 20,
-    paddingRight: 20,
+    padding: 20,
+    maxWidth: 700,
+  },
+  gridButton: {
+    marginTop: 15,
   },
 }));
 
@@ -355,7 +359,32 @@ export default function CreateUser() {
                 </Box>
               )}
 
-              <Grid container spacing={1}>
+              <Grid
+                container
+                item
+                spacing={1}
+                className={classes.gridButton}
+                justify="flex-end"
+              >
+                <Grid item>
+                  <Button
+                    disabled={isSubmitting}
+                    variant="outlined"
+                    onClick={checkStepBackward}
+                  >
+                    <Link href={`/admin/accounts`}>
+                      <div
+                        style={{
+                          textDecoration: "none",
+                          font: "#000000DE",
+                        }}
+                      >
+                        Cancel
+                      </div>
+                    </Link>
+                  </Button>
+                </Grid>
+                
                 {step > 0 ? (
                   <Grid item>
                     <Button
@@ -368,20 +397,24 @@ export default function CreateUser() {
                   </Grid>
                 ) : null}
 
-                <Grid item>
-                  {step !== steps.length - 1 && (
-                    <Button
-                      disabled={isSubmitting}
-                      variant="contained"
-                      color="primary"
-                      type="button"
-                      onClick={checkStepForward}
-                    >
-                      Next
-                    </Button>
-                  )}
+                {step !== steps.length - 1 && (
+                  <>
+                    <Grid item>
+                      <Button
+                        disabled={isSubmitting}
+                        variant="contained"
+                        color="primary"
+                        type="button"
+                        onClick={checkStepForward}
+                      >
+                        Next
+                      </Button>
+                    </Grid>
+                  </>
+                )}
 
-                  {step === steps.length - 1 && (
+                {step === steps.length - 1 && (
+                  <Grid item>
                     <Button
                       startIcon={
                         isSubmitting ? <CircularProgress size="1rem" /> : null
@@ -394,8 +427,8 @@ export default function CreateUser() {
                     >
                       Submit
                     </Button>
-                  )}
-                </Grid>
+                  </Grid>
+                )}
               </Grid>
             </Form>
           )}
