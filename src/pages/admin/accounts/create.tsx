@@ -18,11 +18,12 @@ import {
 import { Field, Form, Formik, FieldArray } from "formik";
 import { CheckboxWithLabel, TextField } from "formik-material-ui";
 import { AdminMenu } from "../../../database/AdminMenu";
-import React, { Children, useState } from "react";
+import React, { Children, useState, useRef } from "react";
 import { mixed, number, object, array, string } from "yup";
 
 import Title from "../../../components/Title";
 import Breadcrumbs from "../../../components/Breadcrumbs";
+import Review from "../../../components/Review";
 
 const useStyles = makeStyles((theme) => ({
   noWrap: {
@@ -55,7 +56,12 @@ const useStyles = makeStyles((theme) => ({
 
 const sleep = (time) => new Promise((acc) => setTimeout(acc, time));
 
-const emptyDonation = { institution: "", percentage: 0 };
+const emptyVehicle = {
+  vehicleID: "",
+  vehicleName: "",
+  seat: 0,
+  vehicleAddress: "",
+};
 
 const breadcumbData = [
   {
@@ -109,7 +115,7 @@ export default function CreateUser() {
             Gender: "" || "Male",
             Address: "",
             HomeTown: "",
-            donations: [emptyDonation],
+            vehicles: [emptyVehicle],
           }}
           onSubmit={async (values, helpers) => {
             await sleep(3000);
@@ -124,21 +130,22 @@ export default function CreateUser() {
             Gender: string(),
             Address: string().required("Cần nhập địa chỉ"),
             HomeTown: string().required("Cần nhập quê quán"),
-            donations: array(
+            vehicles: array(
               object({
-                institution: string()
-                  .required("Institution name needed")
-                  .min(3, "Institution name needs to be at least 3 characters")
-                  .max(
-                    10,
-                    "Institution name needs to be at most 10 characters"
-                  ),
-                percentage: number()
-                  .required("Percentage needed")
-                  .min(1, "Percentage needs to be at least 1%")
-                  .max(100, "Percentage can be at most 100%"),
+                vehicleID: string()
+                  .required("Cần nhập biển số xe")
+                  .min(8, "Biển số xe cần ít nhất 8 ký tự")
+                  .max(10, "Biển số xe có tối đa 10 ký tự"),
+                vehicleName: string().required("Cần nhập tên xe"),
+                seat: number()
+                  .required("seat needed")
+                  .min(4, "Số chỗ ngồi tối thiểu là 4")
+                  .max(100, "Số chỗ ngồi tối thiểu là 100"),
+                vehicleAddress: string().required(
+                  "Cần nhập nơi đăng ký biển số"
+                ),
               })
-            ).min(1, "You need to provide at least 1 institution"),
+            ).min(1, "You need to provide at least 1 vehicleID"),
           })}
         >
           {({ values, errors, isSubmitting }) => (
@@ -203,6 +210,7 @@ export default function CreateUser() {
                           name="Password"
                           component={TextField}
                           label="Mật khẩu"
+                          type="password"
                         />
                       </Grid>
                       <Grid item xs={12} sm={3} className={classes.selectBox}>
@@ -244,16 +252,16 @@ export default function CreateUser() {
                   <Typography variant="h6" gutterBottom>
                     {steps[step]}
                   </Typography>
-                  <FieldArray name="donations">
+                  <FieldArray name="vehicles">
                     {({ push, remove }) => (
                       <React.Fragment>
                         <Grid item>
                           <Typography variant="body2">
-                            All your donations
+                            All your vehicles: {values.vehicles.length}
                           </Typography>
                         </Grid>
 
-                        {values.donations.map((_, index) => (
+                        {values.vehicles.map((_, index) => (
                           <Grid
                             container
                             item
@@ -262,21 +270,37 @@ export default function CreateUser() {
                             spacing={2}
                           >
                             <Grid item container spacing={2} xs={12} sm="auto">
-                              <Grid item xs={12} sm={6}>
+                              <Grid item xs={12} sm={3}>
                                 <Field
                                   fullWidth
-                                  name={`donations.${index}.institution`}
+                                  name={`vehicles.${index}.vehicleID`}
                                   component={TextField}
-                                  label="Institution"
+                                  label="Biển số"
                                 />
                               </Grid>
-                              <Grid item xs={12} sm={6}>
+                              <Grid item xs={12} sm={3}>
                                 <Field
                                   fullWidth
-                                  name={`donations[${index}].percentage`}
+                                  name={`vehicles.${index}.vehicleName`}
+                                  component={TextField}
+                                  label="Tên xe"
+                                />
+                              </Grid>
+                              <Grid item xs={12} sm={3}>
+                                <Field
+                                  fullWidth
+                                  name={`vehicles[${index}].seat`}
                                   component={TextField}
                                   type="number"
-                                  label="Percentage (%)"
+                                  label="Số chỗ ngồi"
+                                />
+                              </Grid>
+                              <Grid item xs={12} sm={3}>
+                                <Field
+                                  fullWidth
+                                  name={`vehicles.${index}.vehicleAddress`}
+                                  component={TextField}
+                                  label="Nơi đăng ký"
                                 />
                               </Grid>
                             </Grid>
@@ -295,9 +319,9 @@ export default function CreateUser() {
                         ))}
 
                         <Grid item>
-                          {typeof errors.donations === "string" ? (
+                          {typeof errors.vehicles === "string" ? (
                             <Typography color="error">
-                              {errors.donations}
+                              {errors.vehicles}
                             </Typography>
                           ) : null}
                         </Grid>
@@ -307,7 +331,7 @@ export default function CreateUser() {
                             disabled={isSubmitting}
                             variant="outlined"
                             color="primary"
-                            onClick={() => push(emptyDonation)}
+                            onClick={() => push(emptyVehicle)}
                             className={classes.addButton}
                           >
                             Add Donation
@@ -327,11 +351,11 @@ export default function CreateUser() {
                   {Object.keys(errors).length >= 1 ? (
                     <Typography color="error">ERROR</Typography>
                   ) : null}
-                  <pre>{JSON.stringify(values, null, 4)}</pre>
+                  <Review user={values} />
                 </Box>
               )}
 
-              <Grid container spacing={3}>
+              <Grid container spacing={1}>
                 {step > 0 ? (
                   <Grid item>
                     <Button
