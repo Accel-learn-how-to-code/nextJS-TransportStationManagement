@@ -18,6 +18,7 @@ import {
 import Link from "next/link";
 import { Field, Form, Formik, FieldArray } from "formik";
 import { CheckboxWithLabel, TextField } from "formik-material-ui";
+import { DataGrid } from "@material-ui/data-grid";
 import { AdminMenu } from "../../../database/AdminMenu";
 import React, { Children, useState, useRef } from "react";
 import { mixed, number, object, array, string } from "yup";
@@ -61,10 +62,10 @@ const useStyles = makeStyles((theme) => ({
 const sleep = (time) => new Promise((acc) => setTimeout(acc, time));
 
 const emptyVehicle = {
-  vehicleID: "",
-  vehicleName: "",
-  seat: 0,
-  vehicleAddress: "",
+  id: "",
+  tenXe: "",
+  soChoNgoi: 0,
+  noiDangKy: "",
 };
 
 const breadcumbData = [
@@ -105,6 +106,19 @@ export default function CreateUser() {
   };
 
   const steps = ["Thông tin người dùng", "Thông tin xe", "Hoàn tất đăng ký"];
+
+  const columns = [
+    { field: "id", headerName: "ID", width: 130 },
+    { field: "tenXe", headerName: "Tên xe", width: 150 },
+    {
+      field: "soChoNgoi",
+      headerName: "Số chỗ ngồi",
+      type: "number",
+      width: 130,
+    },
+    { field: "noiDangKy", headerName: "Nơi đăng ký", width: 150 },
+  ];
+
   return (
     <>
       <Breadcrumbs breadcumbData={breadcumbData} />
@@ -115,7 +129,7 @@ export default function CreateUser() {
             UsersName: "",
             Email: "",
             TelNo: "",
-            Password: "",
+            pass: "",
             Gender: "" || "Male",
             Address: "",
             HomeTown: "",
@@ -130,26 +144,24 @@ export default function CreateUser() {
             UsersName: string().required("Cần nhập tên người dùng"),
             Email: string().email().required("Cần nhập email"),
             TelNo: string().required("Cần nhập số điện thoại"),
-            Password: string().required("Cần đặt mật khẩu"),
+            pass: string().required("Cần đặt mật khẩu"),
             Gender: string(),
             Address: string().required("Cần nhập địa chỉ"),
             HomeTown: string().required("Cần nhập quê quán"),
             vehicles: array(
               object({
-                vehicleID: string()
+                id: string()
                   .required("Cần nhập biển số xe")
                   .min(8, "Biển số xe cần ít nhất 8 ký tự")
                   .max(10, "Biển số xe có tối đa 10 ký tự"),
-                vehicleName: string().required("Cần nhập tên xe"),
-                seat: number()
-                  .required("seat needed")
+                tenXe: string().required("Cần nhập tên xe"),
+                soChoNgoi: number()
+                  .required("soChoNgoi needed")
                   .min(4, "Số chỗ ngồi tối thiểu là 4")
                   .max(100, "Số chỗ ngồi tối thiểu là 100"),
-                vehicleAddress: string().required(
-                  "Cần nhập nơi đăng ký biển số"
-                ),
+                noiDangKy: string().required("Cần nhập nơi đăng ký biển số"),
               })
-            ).min(1, "You need to provide at least 1 vehicleID"),
+            ).min(1, "You need to provide at least 1 id"),
           })}
         >
           {({ values, errors, isSubmitting }) => (
@@ -211,7 +223,7 @@ export default function CreateUser() {
                       <Grid item xs={12} sm={3}>
                         <Field
                           fullWidth
-                          name="Password"
+                          name="pass"
                           component={TextField}
                           label="Mật khẩu"
                           type="password"
@@ -277,7 +289,7 @@ export default function CreateUser() {
                               <Grid item xs={12} sm={3}>
                                 <Field
                                   fullWidth
-                                  name={`vehicles.${index}.vehicleID`}
+                                  name={`vehicles.${index}.id`}
                                   component={TextField}
                                   label="Biển số"
                                 />
@@ -285,7 +297,7 @@ export default function CreateUser() {
                               <Grid item xs={12} sm={3}>
                                 <Field
                                   fullWidth
-                                  name={`vehicles.${index}.vehicleName`}
+                                  name={`vehicles.${index}.tenXe`}
                                   component={TextField}
                                   label="Tên xe"
                                 />
@@ -293,7 +305,7 @@ export default function CreateUser() {
                               <Grid item xs={12} sm={3}>
                                 <Field
                                   fullWidth
-                                  name={`vehicles[${index}].seat`}
+                                  name={`vehicles[${index}].soChoNgoi`}
                                   component={TextField}
                                   type="number"
                                   label="Số chỗ ngồi"
@@ -302,7 +314,7 @@ export default function CreateUser() {
                               <Grid item xs={12} sm={3}>
                                 <Field
                                   fullWidth
-                                  name={`vehicles.${index}.vehicleAddress`}
+                                  name={`vehicles.${index}.noiDangKy`}
                                   component={TextField}
                                   label="Nơi đăng ký"
                                 />
@@ -353,9 +365,27 @@ export default function CreateUser() {
                     {steps[step]}
                   </Typography>
                   {Object.keys(errors).length >= 1 ? (
-                    <Typography color="error">ERROR</Typography>
+                    <Typography color="error">
+                      Có lỗi xảy ra - Xin vui lòng kiểm tra lại các bước đăng
+                      ký!
+                    </Typography>
                   ) : null}
                   <Review user={values} />
+                  <Box marginTop={3}>
+                    <Typography variant="h6" gutterBottom>
+                      Xe của bạn: {values.vehicles.length}
+                    </Typography>
+                    {values.vehicles.length > 0 && (
+                      <div style={{ height: 400, width: "100%" }}>
+                        <DataGrid
+                          rows={values.vehicles}
+                          columns={columns}
+                          pageSize={10}
+                          disableSelectionOnClick
+                        />
+                      </div>
+                    )}
+                  </Box>
                 </Box>
               )}
 
@@ -384,7 +414,7 @@ export default function CreateUser() {
                     </Link>
                   </Button>
                 </Grid>
-                
+
                 {step > 0 ? (
                   <Grid item>
                     <Button

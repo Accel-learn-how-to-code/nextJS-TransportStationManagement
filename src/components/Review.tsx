@@ -59,8 +59,6 @@ export default function Review({ user }) {
           </Typography>
         </ListItem>
       </List>
-
-      <Grid container spacing={2}></Grid>
     </>
   );
 }
