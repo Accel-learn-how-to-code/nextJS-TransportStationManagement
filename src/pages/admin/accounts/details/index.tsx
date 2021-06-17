@@ -103,7 +103,11 @@ export default function UserDetail({ user, vehicle }) {
               type="button"
               //onClick={checkStepForward}
             >
-              BACK
+              <Link href={`/admin/accounts`}>
+                <div style={{ textDecoration: "none", font: "#000000DE" }}>
+                  BACK
+                </div>
+              </Link>
             </Button>
           </Grid>
           <Grid item>
