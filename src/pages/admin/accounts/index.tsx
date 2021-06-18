@@ -79,7 +79,7 @@ export default function Accounts({ dataUsers }) {
   const [refesh, setRefresh] = useState(false);
   const [alertModel, setAlertModel] = useState(false);
   const [deleteAlert, setDeleteAlert] = useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const breadcumbData = [
     {
@@ -93,7 +93,6 @@ export default function Accounts({ dataUsers }) {
 
   //tạo data đưa vào data grid
   const Admin = allUsers.filter((x) => x.AccountType === "AD");
-  const ChuXe = allUsers.filter((x) => x.AccountType === "CX");
   const NhaXe = allUsers.filter((x) => x.AccountType === "NX");
   const dataTable = [
     {
@@ -108,11 +107,6 @@ export default function Accounts({ dataUsers }) {
     },
     {
       value: "3",
-      label: "Chủ Xe",
-      data: ChuXe,
-    },
-    {
-      value: "4",
       label: "Nhà Xe",
       data: NhaXe,
     },

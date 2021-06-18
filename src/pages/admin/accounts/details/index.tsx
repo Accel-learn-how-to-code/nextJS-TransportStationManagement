@@ -79,17 +79,21 @@ export default function UserDetail({ user, vehicle }) {
       <Paper elevation={2} className={classes.grid}>
         <Title>Thông tin người dùng</Title>
         <Review user={user[0]} />
-        <Typography variant="h6" gutterBottom>
-          Xe của bạn: {vehicle.length}
-        </Typography>
-        <div style={{ height: 400, width: "100%" }}>
-          <DataGrid
-            rows={vehicle}
-            columns={columns}
-            pageSize={10}
-            disableSelectionOnClick
-          />
-        </div>
+        {vehicle.length > 0 && (
+          <>
+            <Typography variant="h6" gutterBottom>
+              Xe của bạn: {vehicle.length}
+            </Typography>
+            <div style={{ height: 250, width: "100%" }}>
+              <DataGrid
+                rows={vehicle}
+                columns={columns}
+                pageSize={10}
+                disableSelectionOnClick
+              />
+            </div>
+          </>
+        )}
 
         <Grid
           className={classes.gridButton}

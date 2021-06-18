@@ -34,20 +34,21 @@ export default function Review({ user }) {
       values.push(obj);
     }
   });
+  const searchRegExp = /"/g;
   return (
     <>
       <List disablePadding className={classes.listContainer}>
         {values.map((element, index) => (
           <ListItem className={classes.listItem} key={index}>
             <ListItemText
-              primary={`${JSON.stringify(Object.keys(element)[0]).replaceAll(
-                '"',
+              primary={`${JSON.stringify(Object.keys(element)[0]).replace(
+                searchRegExp,
                 ""
               )}:`}
             />
 
             <Typography variant="subtitle2">
-              {JSON.stringify(Object.values(element)[0]).replaceAll('"', "")}
+              {JSON.stringify(Object.values(element)[0]).replace(searchRegExp, "")}
             </Typography>
           </ListItem>
         ))}

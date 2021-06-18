@@ -350,7 +350,7 @@ export default function CreateUser() {
                             onClick={() => push(emptyVehicle)}
                             className={classes.addButton}
                           >
-                            Add Donation
+                            Add Vehicle
                           </Button>
                         </Grid>
                       </React.Fragment>

@@ -1,8 +1,9 @@
-import { AdminMenu } from "../../../../database/AdminMenu";
-import Review from "../../../../components/Review";
-import { secret } from "../../../../../api/secret";
-import Breadcrumbs from "../../../../components/Breadcrumbs";
-import Title from "../../../../components/Title";
+import React, { useState, useEffect } from "react";
+import { AdminMenu } from "../../../../../database/AdminMenu";
+import Review from "../../../../../components/Review";
+import { secret } from "../../../../../../api/secret";
+import Breadcrumbs from "../../../../../components/Breadcrumbs";
+import Title from "../../../../../components/Title";
 import Router from "next/router";
 import { Field, Form, Formik, FieldArray } from "formik";
 import { CheckboxWithLabel, TextField } from "formik-material-ui";
@@ -10,7 +11,7 @@ import { mixed, number, object, array, string } from "yup";
 
 import axios from "axios";
 import { verify } from "jsonwebtoken";
-import { DataGrid } from "@material-ui/data-grid";
+import { DataGrid, GridColDef, GridCellParams } from "@material-ui/data-grid";
 import {
   Box,
   Button,
@@ -24,12 +25,13 @@ import {
   Typography,
   makeStyles,
   Select,
-  MenuItem,
   FormControl,
   Paper,
   List,
   ListItem,
   ListItemText,
+  Menu,
+  MenuItem,
 } from "@material-ui/core";
 import Link from "next/link";
 
@@ -66,19 +68,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const columns = [
-  { field: "id", headerName: "ID", width: 130, editable: true },
-  { field: "tenXe", headerName: "Tên xe", width: 150, editable: true },
-  {
-    field: "soChoNgoi",
-    headerName: "Số chỗ ngồi",
-    type: "number",
-    width: 130,
-    editable: true,
-  },
-  { field: "noiDangKy", headerName: "Nơi đăng ký", width: 150, editable: true },
-];
-
 const breadcumbData = [
   {
     path: "/admin",
@@ -93,8 +82,82 @@ const breadcumbData = [
   },
 ];
 const sleep = (time) => new Promise((acc) => setTimeout(acc, time));
+
 export default function UserDetail({ user, vehicle }) {
   const classes = useStyles();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedVehicle, setSelectedVehicle] = useState('');
+
+  const handleMenuClick = (event, id: string) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedVehicle(id);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const columns = [
+    { field: "id", headerName: "ID", width: 130, editable: true },
+    { field: "tenXe", headerName: "Tên xe", width: 150, editable: true },
+    {
+      field: "soChoNgoi",
+      headerName: "Số chỗ ngồi",
+      type: "number",
+      width: 130,
+      editable: true,
+    },
+    {
+      field: "noiDangKy",
+      headerName: "Nơi đăng ký",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "Action",
+      headerName: " ",
+      sortable: false,
+      width: 130,
+      renderCell: (params: GridCellParams) => (
+        <div>
+          <Button
+            variant="outlined"
+            color="primary"
+            size="small"
+            aria-controls="usersMenu"
+            aria-haspopup="true"
+            onClick={(event) => {
+              handleMenuClick(event, params.row.id);
+            }}
+          >
+            Action
+          </Button>
+          <Menu
+            elevation={1}
+            id="usersMenu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+          >
+            <MenuItem onClick={handleMenuClose}>
+              <Link href={`/admin/accounts/details/update/vehicle?id=${user[0].id}&vehicleId=${selectedVehicle}`}>
+                <div style={{ textDecoration: "none", font: "#000000DE" }}>
+                  Sửa thông tin
+                </div>
+              </Link>
+            </MenuItem>
+            <MenuItem
+            // onClick={setDeleteAlertStatus}
+            >
+              Xóa xe
+            </MenuItem>
+            <MenuItem onClick={handleMenuClose}>Close</MenuItem>
+          </Menu>
+        </div>
+      ),
+    },
+  ];
 
   return (
     <>
@@ -124,20 +187,6 @@ export default function UserDetail({ user, vehicle }) {
             Gender: string(),
             Address: string().required("Cần nhập địa chỉ"),
             HomeTown: string().required("Cần nhập quê quán"),
-            // vehicles: array(
-            //   object({
-            //     id: string()
-            //       .required("Cần nhập biển số xe")
-            //       .min(8, "Biển số xe cần ít nhất 8 ký tự")
-            //       .max(10, "Biển số xe có tối đa 10 ký tự"),
-            //     tenXe: string().required("Cần nhập tên xe"),
-            //     soChoNgoi: number()
-            //       .required("soChoNgoi needed")
-            //       .min(4, "Số chỗ ngồi tối thiểu là 4")
-            //       .max(100, "Số chỗ ngồi tối thiểu là 100"),
-            //     noiDangKy: string().required("Cần nhập nơi đăng ký biển số"),
-            //   })
-            // ).min(1, "You need to provide at least 1 id"),
           })}
         >
           {({ values, errors, isSubmitting }) => (
