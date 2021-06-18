@@ -86,7 +86,7 @@ const sleep = (time) => new Promise((acc) => setTimeout(acc, time));
 export default function UserDetail({ user, vehicle }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedVehicle, setSelectedVehicle] = useState('');
+  const [selectedVehicle, setSelectedVehicle] = useState("");
 
   const handleMenuClick = (event, id: string) => {
     setAnchorEl(event.currentTarget);
@@ -141,7 +141,9 @@ export default function UserDetail({ user, vehicle }) {
             onClose={handleMenuClose}
           >
             <MenuItem onClick={handleMenuClose}>
-              <Link href={`/admin/accounts/details/update/vehicle?id=${user[0].id}&vehicleId=${selectedVehicle}`}>
+              <Link
+                href={`/admin/accounts/details/update/vehicle?id=${user[0].id}&vehicleId=${selectedVehicle}`}
+              >
                 <div style={{ textDecoration: "none", font: "#000000DE" }}>
                   Sửa thông tin
                 </div>
@@ -248,8 +250,14 @@ export default function UserDetail({ user, vehicle }) {
               </List>
 
               <Typography variant="h6" gutterBottom>
-                Xe của bạn: {vehicle.length}
+                Xe của bạn: {vehicle.length} {' '}
+                <Link href={`/admin/accounts/details/update/createVehicle?id=${user[0].id}`}>
+                  <Button variant="outlined" color="primary">
+                    Thêm xe
+                  </Button>
+                </Link>
               </Typography>
+
               <div style={{ height: 400, width: "100%" }}>
                 <DataGrid
                   rows={values.vehicles}

@@ -114,20 +114,23 @@ export default function UserDetail({ user, vehicle }) {
               </Link>
             </Button>
           </Grid>
-          <Grid item>
-            <Button
-              variant="contained"
-              color="primary"
-              type="button"
-              //onClick={checkStepForward}
-            >
-              <Link href={`/admin/accounts/details/update?id=${user[0].id}`}>
-                <div style={{ textDecoration: "none", font: "#000000DE" }}>
-                  EDIT
-                </div>
-              </Link>
-            </Button>
-          </Grid>
+
+          {user[0].AccountType === "NX" && (
+            <Grid item>
+              <Button
+                variant="contained"
+                color="primary"
+                type="button"
+                //onClick={checkStepForward}
+              >
+                <Link href={`/admin/accounts/details/update?id=${user[0].id}`}>
+                  <div style={{ textDecoration: "none", font: "#000000DE" }}>
+                    EDIT
+                  </div>
+                </Link>
+              </Button>
+            </Grid>
+          )}
         </Grid>
       </Paper>
     </>

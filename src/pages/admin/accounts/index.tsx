@@ -80,6 +80,7 @@ export default function Accounts({ dataUsers }) {
   const [alertModel, setAlertModel] = useState(false);
   const [deleteAlert, setDeleteAlert] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl2, setAnchorEl2] = useState(null);
 
   const breadcumbData = [
     {
@@ -112,6 +113,24 @@ export default function Accounts({ dataUsers }) {
     },
   ];
 
+  const handleMenuClick = (event, id: string) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedUser([id]);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleMenuClick2 = (event, id: string) => {
+    setAnchorEl2(event.currentTarget);
+    setSelectedUser([id]);
+  };
+
+  const handleMenuClose2 = () => {
+    setAnchorEl2(null);
+  };
+
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 100 },
     { field: "UsersName", headerName: "Name", width: 200 },
@@ -127,18 +146,36 @@ export default function Accounts({ dataUsers }) {
       width: 130,
       renderCell: (params: GridCellParams) => (
         <div>
-          <Button
-            variant="outlined"
-            color="primary"
-            size="small"
-            aria-controls="usersMenu"
-            aria-haspopup="true"
-            onClick={(event) => {
-              handleMenuClick(event, params.row.id);
-            }}
-          >
-            Action
-          </Button>
+          {params.row.AccountType === "NX" && (
+            <Button
+              variant="outlined"
+              color="primary"
+              size="small"
+              aria-controls="usersMenu"
+              aria-haspopup="true"
+              onClick={(event) => {
+                handleMenuClick(event, params.row.id);
+              }}
+            >
+              Action
+            </Button>
+          )}
+
+          {params.row.AccountType === "AD" && (
+            <Button
+              variant="outlined"
+              color="primary"
+              size="small"
+              aria-controls="AdminMenu"
+              aria-haspopup="true"
+              onClick={(event) => {
+                handleMenuClick2(event, params.row.id);
+              }}
+            >
+              Action
+            </Button>
+          )}
+
           <Menu
             elevation={1}
             id="usersMenu"
@@ -154,6 +191,7 @@ export default function Accounts({ dataUsers }) {
                 </div>
               </Link>
             </MenuItem>
+
             <MenuItem onClick={handleMenuClose}>
               <Link href={`/admin/accounts/details/update?id=${selectedUser}`}>
                 <div style={{ textDecoration: "none", font: "#000000DE" }}>
@@ -161,8 +199,28 @@ export default function Accounts({ dataUsers }) {
                 </div>
               </Link>
             </MenuItem>
+
             <MenuItem onClick={setDeleteAlertStatus}>Xóa tài khoản</MenuItem>
             <MenuItem onClick={handleMenuClose}>Close</MenuItem>
+          </Menu>
+
+          <Menu
+            elevation={1}
+            id="AdminMenu"
+            anchorEl={anchorEl2}
+            keepMounted
+            open={Boolean(anchorEl2)}
+            onClose={handleMenuClose2}
+          >
+            <MenuItem onClick={handleMenuClose2}>
+              <Link href={`/admin/accounts/details?id=${selectedUser}`}>
+                <div style={{ textDecoration: "none", font: "#000000DE" }}>
+                  Xem chi tiết
+                </div>
+              </Link>
+            </MenuItem>
+
+            <MenuItem onClick={handleMenuClose2}>Close</MenuItem>
           </Menu>
         </div>
       ),
@@ -172,15 +230,6 @@ export default function Accounts({ dataUsers }) {
   useEffect(() => {
     refreshData();
   }, [dataUsers]);
-
-  const handleMenuClick = (event, id: string) => {
-    setAnchorEl(event.currentTarget);
-    setSelectedUser([id]);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
 
   const refreshData = () => {
     setRefresh(!refesh);
