@@ -48,15 +48,17 @@ export default function Review({ user }) {
             />
 
             <Typography variant="subtitle2">
-              {JSON.stringify(Object.values(element)[0]).replace(searchRegExp, "")}
+              {JSON.stringify(Object.values(element)[0]).replace(
+                searchRegExp,
+                ""
+              )}
             </Typography>
           </ListItem>
         ))}
-        {/* <pre>{JSON.stringify(user, null, 4)}</pre> */}
         <ListItem className={classes.listItem}>
           <ListItemText primary="Loại tài khoản" />
           <Typography variant="subtitle1" className={classes.total}>
-            Chủ xe
+            {user.AccountType === "AD" ? "Admin" : "Nhà xe"}
           </Typography>
         </ListItem>
       </List>
