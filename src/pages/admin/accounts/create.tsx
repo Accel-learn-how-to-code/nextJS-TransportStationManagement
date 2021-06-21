@@ -1,8 +1,6 @@
 import {
   Box,
   Button,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   Step,
@@ -17,15 +15,18 @@ import {
 } from "@material-ui/core";
 import Link from "next/link";
 import { Field, Form, Formik, FieldArray } from "formik";
-import { CheckboxWithLabel, TextField } from "formik-material-ui";
+import { TextField } from "formik-material-ui";
 import { DataGrid } from "@material-ui/data-grid";
 import { AdminMenu } from "../../../database/AdminMenu";
-import React, { Children, useState, useRef } from "react";
-import { mixed, number, object, array, string } from "yup";
-
+import React, { useState } from "react";
+import { number, object, array, string } from "yup";
+import axios from "axios";
+import { secret } from "../../../../api/secret";
+import { verify } from "jsonwebtoken";
 import Title from "../../../components/Title";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import Review from "../../../components/Review";
+import Router from "next/router";
 
 const useStyles = makeStyles((theme) => ({
   noWrap: {
@@ -66,6 +67,7 @@ const emptyVehicle = {
   tenXe: "",
   soChoNgoi: 0,
   noiDangKy: "",
+  maODauXe: "",
 };
 
 const breadcumbData = [
@@ -82,7 +84,7 @@ const breadcumbData = [
   },
 ];
 
-export default function CreateUser() {
+export default function CreateUser({ oDau }) {
   const [completed, setCompleted] = useState(false);
   const [step, setStep] = useState(0);
   const classes = useStyles();
@@ -117,6 +119,7 @@ export default function CreateUser() {
       width: 130,
     },
     { field: "noiDangKy", headerName: "Nơi đăng ký", width: 150 },
+    { field: "maODauXe", headerName: "Mã ô đậu", width: 150 },
   ];
 
   return (
@@ -136,8 +139,21 @@ export default function CreateUser() {
             vehicles: [emptyVehicle],
           }}
           onSubmit={async (values, helpers) => {
-            await sleep(3000);
-            console.log(values);
+            await axios({
+              method: "POST",
+              url: "/api/admin/accounts/create",
+              withCredentials: true,
+              data: {
+                UsersName: values.UsersName,
+                Email: values.Email,
+                TelNo: values.TelNo,
+                pass: values.pass,
+                Gender: values.Gender,
+                Address: values.Address,
+                HomeTown: values.HomeTown,
+                vehicles: values.vehicles,
+              },
+            });
             helpers.setTouched({});
           }}
           validationSchema={object({
@@ -160,6 +176,7 @@ export default function CreateUser() {
                   .min(4, "Số chỗ ngồi tối thiểu là 4")
                   .max(100, "Số chỗ ngồi tối thiểu là 100"),
                 noiDangKy: string().required("Cần nhập nơi đăng ký biển số"),
+                maODauXe: string().required("Cần có ô đậu xe"),
               })
             ).min(1, "You need to provide at least 1 id"),
           })}
@@ -286,7 +303,7 @@ export default function CreateUser() {
                             spacing={2}
                           >
                             <Grid item container spacing={2} xs={12} sm="auto">
-                              <Grid item xs={12} sm={3}>
+                              <Grid item xs={12} sm={2}>
                                 <Field
                                   fullWidth
                                   name={`vehicles.${index}.id`}
@@ -294,7 +311,7 @@ export default function CreateUser() {
                                   label="Biển số"
                                 />
                               </Grid>
-                              <Grid item xs={12} sm={3}>
+                              <Grid item xs={12} sm={2}>
                                 <Field
                                   fullWidth
                                   name={`vehicles.${index}.tenXe`}
@@ -302,13 +319,13 @@ export default function CreateUser() {
                                   label="Tên xe"
                                 />
                               </Grid>
-                              <Grid item xs={12} sm={3}>
+                              <Grid item xs={12} sm={2}>
                                 <Field
                                   fullWidth
                                   name={`vehicles[${index}].soChoNgoi`}
                                   component={TextField}
                                   type="number"
-                                  label="Số chỗ ngồi"
+                                  label="Seat"
                                 />
                               </Grid>
                               <Grid item xs={12} sm={3}>
@@ -318,6 +335,22 @@ export default function CreateUser() {
                                   component={TextField}
                                   label="Nơi đăng ký"
                                 />
+                              </Grid>
+                              <Grid item xs={12} sm={3} className={classes.selectBox}>
+                                <FormControl fullWidth>
+                                  <Field
+                                    fullWidth
+                                    as={Select}
+                                    name={`vehicles.${index}.maODauXe`}
+                                    label="Ô đậu xe"
+                                  >
+                                    {oDau.map((x, index) => (
+                                      <MenuItem value={x.id} key={index}>
+                                        {x.tenODau}
+                                      </MenuItem>
+                                    ))}
+                                  </Field>
+                                </FormControl>
                               </Grid>
                             </Grid>
 
@@ -467,5 +500,50 @@ export default function CreateUser() {
     </>
   );
 }
+
+export const getServerSideProps = async (ctx) => {
+  //lấy cookie nhưng ở dạng string auth=abc123
+  const cookie = ctx.req?.headers.cookie;
+  //lấy cookie nhưng ở dạng object {auth: abc123}
+  const { cookies } = ctx.req;
+
+  var decoded = verify(cookies.auth, secret);
+
+  if (decoded.accountType !== "AD" && ctx.req) {
+    ctx.res?.writeHead(302, {
+      Location: "http://localhost:3000/",
+    });
+    ctx.res?.end();
+    return;
+  }
+
+  const oDau = await axios({
+    method: "GET",
+    url: "http://localhost:3000/api/admin/accounts/create",
+    withCredentials: true,
+    headers: {
+      Cookie: cookie || null,
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => res.data)
+    .catch((err) => {
+      if (err.response.status === 401 && !ctx.req) {
+        Router.replace("/");
+        return;
+      }
+
+      //server-side
+      if (err.response.status === 401 && ctx.req) {
+        ctx.res?.writeHead(302, {
+          Location: "/",
+        });
+        ctx.res?.end();
+        return;
+      }
+    });
+
+  return { props: { oDau } };
+};
 
 CreateUser.AdminMenu = AdminMenu;
