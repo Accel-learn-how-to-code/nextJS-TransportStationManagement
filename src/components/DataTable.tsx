@@ -44,6 +44,7 @@ export default function DataTable({
   dataTable,
   dataTableColumns,
   getSelectedValue,
+  sortModel,
 }) {
   const classes = useStyles();
   const [value, setValue] = useState("1");
@@ -87,13 +88,14 @@ export default function DataTable({
               <DataGrid
                 rows={element.data}
                 columns={dataTableColumns}
-                //pageSize={5}
+                pageSize={10}
                 checkboxSelection
                 disableSelectionOnClick
                 components={{
                   Toolbar: CustomToolbar,
                 }}
                 onSelectionModelChange={giveSelectedValue}
+                sortModel={sortModel}
               />
             </div>
           </TabPanel>

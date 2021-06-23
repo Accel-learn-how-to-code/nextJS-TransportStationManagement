@@ -113,6 +113,13 @@ export default function Accounts({ dataUsers }) {
     },
   ];
 
+  const sortModel = [
+    {
+      field: 'id',
+      sort: 'desc',
+    },
+  ];
+
   const handleMenuClick = (event, id: string) => {
     setAnchorEl(event.currentTarget);
     setSelectedUser([id]);
@@ -323,6 +330,7 @@ export default function Accounts({ dataUsers }) {
       <DataTable
         dataTable={dataTable}
         dataTableColumns={columns}
+        sortModel={sortModel}
         getSelectedValue={getSelectedValue}
       />
 

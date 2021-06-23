@@ -12,6 +12,7 @@ import {
   MenuItem,
   FormControl,
   Paper,
+  InputLabel,
 } from "@material-ui/core";
 import Link from "next/link";
 import { Field, Form, Formik, FieldArray } from "formik";
@@ -154,6 +155,7 @@ export default function CreateUser({ oDau }) {
                 vehicles: values.vehicles,
               },
             });
+            Router.replace("/admin/accounts");
             helpers.setTouched({});
           }}
           validationSchema={object({
@@ -336,8 +338,16 @@ export default function CreateUser({ oDau }) {
                                   label="Nơi đăng ký"
                                 />
                               </Grid>
-                              <Grid item xs={12} sm={3} className={classes.selectBox}>
+                              <Grid
+                                item
+                                xs={12}
+                                sm={3}
+                                className={classes.selectBox}
+                              >
                                 <FormControl fullWidth>
+                                  <InputLabel id="demo-simple-select-label">
+                                    Ô đậu
+                                  </InputLabel>
                                   <Field
                                     fullWidth
                                     as={Select}
