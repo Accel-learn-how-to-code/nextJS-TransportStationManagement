@@ -1,39 +1,31 @@
-import React, { useState, useEffect } from "react";
-import { AdminMenu } from "../../../../../database/AdminMenu";
-import Review from "../../../../../components/Review";
-import { secret } from "../../../../../../api/secret";
-import Breadcrumbs from "../../../../../components/Breadcrumbs";
-import Title from "../../../../../components/Title";
-import Router from "next/router";
-import { Field, Form, Formik, FieldArray } from "formik";
-import { CheckboxWithLabel, TextField } from "formik-material-ui";
-import { mixed, number, object, array, string } from "yup";
-
-import axios from "axios";
-import { verify } from "jsonwebtoken";
-import { DataGrid, GridColDef, GridCellParams } from "@material-ui/data-grid";
 import {
-  Box,
   Button,
-  Card,
-  CardContent,
   CircularProgress,
-  Grid,
-  Step,
-  StepLabel,
-  Stepper,
-  Typography,
-  makeStyles,
-  Select,
   FormControl,
-  Paper,
+  Grid,
   List,
   ListItem,
   ListItemText,
+  makeStyles,
   Menu,
   MenuItem,
+  Paper,
+  Select,
+  Typography,
 } from "@material-ui/core";
+import { DataGrid, GridCellParams } from "@material-ui/data-grid";
+import axios from "axios";
+import { Field, Form, Formik } from "formik";
+import { TextField } from "formik-material-ui";
+import { verify } from "jsonwebtoken";
 import Link from "next/link";
+import Router, { useRouter } from "next/router";
+import React, { useState } from "react";
+import { object, string } from "yup";
+import { secret } from "../../../../../../api/secret";
+import Breadcrumbs from "../../../../../components/Breadcrumbs";
+import Title from "../../../../../components/Title";
+import { AdminMenu } from "../../../../../database/AdminMenu";
 
 const useStyles = makeStyles((theme) => ({
   noWrap: {
@@ -85,6 +77,7 @@ const sleep = (time) => new Promise((acc) => setTimeout(acc, time));
 
 export default function UserDetail({ user, vehicle }) {
   const classes = useStyles();
+  const router = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedVehicle, setSelectedVehicle] = useState("");
 
@@ -97,20 +90,46 @@ export default function UserDetail({ user, vehicle }) {
     setAnchorEl(null);
   };
 
+  const deleteVehicle = async () => {
+    const res = await axios({
+      method: "POST",
+      url: "/api/admin/accounts/removeVehicle",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+      data: {
+        id: selectedVehicle,
+      },
+    });
+
+    // Check that our status code is in the 200s,
+    // meaning the request was successful.
+    if (res.status < 300) {
+      router.replace(Router.asPath);
+    }
+  };
+
   const columns = [
-    { field: "id", headerName: "ID", width: 130, editable: true },
-    { field: "tenXe", headerName: "Tên xe", width: 150, editable: true },
+    { field: "id", headerName: "ID", width: 100, editable: true },
+    { field: "tenXe", headerName: "Tên xe", width: 130, editable: true },
     {
       field: "soChoNgoi",
-      headerName: "Số chỗ ngồi",
+      headerName: "Seat",
       type: "number",
-      width: 130,
+      width: 90,
       editable: true,
     },
     {
       field: "noiDangKy",
       headerName: "Nơi đăng ký",
-      width: 150,
+      width: 130,
+      editable: true,
+    },
+    {
+      field: "maODauXe",
+      headerName: "Ô đậu",
+      width: 100,
       editable: true,
     },
     {
@@ -149,11 +168,7 @@ export default function UserDetail({ user, vehicle }) {
                 </div>
               </Link>
             </MenuItem>
-            <MenuItem
-            // onClick={setDeleteAlertStatus}
-            >
-              Xóa xe
-            </MenuItem>
+            <MenuItem onClick={deleteVehicle}>Xóa xe</MenuItem>
             <MenuItem onClick={handleMenuClose}>Close</MenuItem>
           </Menu>
         </div>
@@ -177,9 +192,23 @@ export default function UserDetail({ user, vehicle }) {
             vehicles: vehicle,
           }}
           onSubmit={async (values, helpers) => {
-            await sleep(3000);
-            console.log("submiting");
-            console.log(values);
+            const { UsersName, Email, TelNo, Gender, Address, HomeTown } =
+              values;
+            await axios({
+              method: "PUT",
+              url: "/api/admin/accounts/update",
+              withCredentials: true,
+              data: {
+                id: user[0].id,
+                UsersName,
+                Email,
+                TelNo,
+                Gender,
+                Address,
+                HomeTown,
+              },
+            });
+            Router.replace("/admin/accounts");
             helpers.setTouched({});
           }}
           validationSchema={object({
@@ -250,8 +279,10 @@ export default function UserDetail({ user, vehicle }) {
               </List>
 
               <Typography variant="h6" gutterBottom>
-                Xe của bạn: {vehicle.length} {' '}
-                <Link href={`/admin/accounts/details/update/createVehicle?id=${user[0].id}`}>
+                Xe của bạn: {vehicle.length}{" "}
+                <Link
+                  href={`/admin/accounts/details/update/createVehicle?id=${user[0].id}`}
+                >
                   <Button variant="outlined" color="primary">
                     Thêm xe
                   </Button>
@@ -274,11 +305,7 @@ export default function UserDetail({ user, vehicle }) {
                 justify="flex-end"
               >
                 <Grid item>
-                  <Button
-                    variant="outlined"
-                    type="button"
-                    //onClick={checkStepForward}
-                  >
+                  <Button variant="outlined" type="button">
                     <Link href={`/admin/accounts`}>
                       <div
                         style={{ textDecoration: "none", font: "#000000DE" }}
@@ -297,7 +324,6 @@ export default function UserDetail({ user, vehicle }) {
                     variant="contained"
                     color="primary"
                     type="submit"
-                    //onClick={checkLastStep}
                   >
                     Submit
                   </Button>

@@ -19,7 +19,7 @@ export default Authenciated(async function Test(
     let vehicle = await pool
       .request()
       .query(
-        `select id, tenXe, soChoNgoi, noiDangKy from tblVehicle where AccountID='${id}'`
+        `select id, tenXe, soChoNgoi, noiDangKy, maODauXe from tblVehicle where AccountID='${id}'`
       );
 
     res.json({user: user.recordset, vehicle: vehicle.recordset});

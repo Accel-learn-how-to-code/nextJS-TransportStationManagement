@@ -1,7 +1,7 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import sql from "mssql";
-import { sqlConfig } from "../../../../database/testDB";
+import { NextApiRequest, NextApiResponse } from "next";
 import { Authenciated } from "../../../../database/Authenciated";
+import { sqlConfig } from "../../../../database/testDB";
 
 export default Authenciated(async function Test(
   req: NextApiRequest,
@@ -14,7 +14,7 @@ export default Authenciated(async function Test(
     let vehicle = await pool
       .request()
       .query(
-        `select id, tenXe, soChoNgoi, noiDangKy from tblVehicle where id='${vehicleId}'`
+        `select id, tenXe, soChoNgoi, noiDangKy, maODauXe from tblVehicle where id='${vehicleId}'`
       );
 
     res.json(vehicle.recordset);
@@ -33,12 +33,11 @@ export default Authenciated(async function Test(
     await pool.request().query(sqlQueryVehicle);
 
     res.json("INSERT VEHICLE SUCCESSFUL");
-
   } else if (req.method === "PUT") {
     let pool = await sql.connect(sqlConfig);
-    const { id, tenXe, soChoNgoi , noiDangKy, maODauXe } = req.body;
+    const { id, tenXe, soChoNgoi, noiDangKy, maODauXe } = req.body;
 
-    const sqlQueryVehicle = `UPDATE tblVehicle set tenXe=N'${tenXe}', soChoNgoi='${soChoNgoi}', noiDangKy='${noiDangKy}', maODauXe='${maODauXe}' where id='${id}'`;
+    const sqlQueryVehicle = `UPDATE tblVehicle set tenXe=N'${tenXe}', soChoNgoi='${soChoNgoi}', noiDangKy=N'${noiDangKy}', maODauXe='${maODauXe}' where id='${id}'`;
     await pool.request().query(sqlQueryVehicle);
 
     res.json("UPDATE VEHICLE SUCCESSFUL");

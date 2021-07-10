@@ -1,31 +1,14 @@
-import { AdminMenu } from "../../../../database/AdminMenu";
-import Review from "../../../../components/Review";
-import { secret } from "../../../../../api/secret";
-import Breadcrumbs from "../../../../components/Breadcrumbs";
-import Title from "../../../../components/Title";
-import Router from "next/router";
-
+import { Button, Grid, makeStyles, Paper, Typography } from "@material-ui/core";
+import { DataGrid } from "@material-ui/data-grid";
 import axios from "axios";
 import { verify } from "jsonwebtoken";
-import { DataGrid } from "@material-ui/data-grid";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CircularProgress,
-  Grid,
-  Step,
-  StepLabel,
-  Stepper,
-  Typography,
-  makeStyles,
-  Select,
-  MenuItem,
-  FormControl,
-  Paper,
-} from "@material-ui/core";
 import Link from "next/link";
+import Router from "next/router";
+import { secret } from "../../../../../api/secret";
+import Breadcrumbs from "../../../../components/Breadcrumbs";
+import Review from "../../../../components/Review";
+import Title from "../../../../components/Title";
+import { AdminMenu } from "../../../../database/AdminMenu";
 
 const useStyles = makeStyles((theme) => ({
   noWrap: {
@@ -54,6 +37,12 @@ const columns = [
     width: 130,
   },
   { field: "noiDangKy", headerName: "Nơi đăng ký", width: 150 },
+  {
+    field: "maODauXe",
+    headerName: "Ô đậu",
+    width: 100,
+    editable: true,
+  },
 ];
 
 const breadcumbData = [

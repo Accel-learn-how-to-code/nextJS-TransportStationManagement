@@ -1,31 +1,28 @@
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import Router from "next/router";
-import Link from "next/link";
 import {
-  Paper,
-  Grid,
   Button,
+  Grid,
   IconButton,
   Menu,
   MenuItem,
+  Paper,
 } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
-import { GridColDef, GridCellParams } from "@material-ui/data-grid";
+import { GridCellParams, GridColDef } from "@material-ui/data-grid";
 import AddIcon from "@material-ui/icons/Add";
 import RefreshIcon from "@material-ui/icons/Refresh";
-
-import { AdminMenu } from "../../../database/AdminMenu";
-import DataTable from "../../../components/DataTable";
-import Breadcrumbs from "../../../components/Breadcrumbs";
-import SearchInput from "../../../components/searchInput";
-import Title from "../../../components/Title";
-import AlertDialog from "../../../components/AlertDialog";
-import { secret } from "../../../../api/secret";
-
+import { Alert } from "@material-ui/lab";
 import axios from "axios";
 import { verify } from "jsonwebtoken";
+import Link from "next/link";
+import Router, { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import { secret } from "../../../../api/secret";
+import AlertDialog from "../../../components/AlertDialog";
+import Breadcrumbs from "../../../components/Breadcrumbs";
+import DataTable from "../../../components/DataTable";
+import SearchInput from "../../../components/searchInput";
+import Title from "../../../components/Title";
+import { AdminMenu } from "../../../database/AdminMenu";
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -115,8 +112,8 @@ export default function Accounts({ dataUsers }) {
 
   const sortModel = [
     {
-      field: 'id',
-      sort: 'desc',
+      field: "id",
+      sort: "desc",
     },
   ];
 
@@ -266,14 +263,13 @@ export default function Accounts({ dataUsers }) {
   };
 
   const deleteUser = async () => {
+    console.log(selectedUser[0]);
     const res = await axios({
-      headers: {
-        "Content-Type": "application/json",
-      },
       method: "post",
       url: "/api/admin/accounts/delete",
+      withCredentials: true,
       data: {
-        selectedUser,
+        id: selectedUser[0],
       },
     });
 

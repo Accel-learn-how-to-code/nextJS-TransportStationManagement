@@ -1,33 +1,28 @@
-import { AdminMenu } from "../../../../../database/AdminMenu";
 import {
   Box,
   Button,
-  Card,
-  CardContent,
   CircularProgress,
-  Grid,
-  Step,
-  StepLabel,
-  Stepper,
-  Typography,
-  makeStyles,
-  Select,
-  MenuItem,
   FormControl,
+  Grid,
+  InputLabel,
+  makeStyles,
+  MenuItem,
   Paper,
+  Select,
+  Typography,
 } from "@material-ui/core";
-import Link from "next/link";
-import { Field, Form, Formik, FieldArray } from "formik";
-import { CheckboxWithLabel, TextField } from "formik-material-ui";
-import { DataGrid } from "@material-ui/data-grid";
-import React, { useState, useRef } from "react";
-import { mixed, number, object, array, string } from "yup";
 import axios from "axios";
-import Router from "next/router";
-import Title from "../../../../../components/Title";
-import Breadcrumbs from "../../../../../components/Breadcrumbs";
-import { secret } from "../../../../../../api/secret";
+import { Field, FieldArray, Form, Formik } from "formik";
+import { TextField } from "formik-material-ui";
 import { verify } from "jsonwebtoken";
+import Link from "next/link";
+import Router from "next/router";
+import React from "react";
+import { array, number, object, string } from "yup";
+import { secret } from "../../../../../../api/secret";
+import Breadcrumbs from "../../../../../components/Breadcrumbs";
+import Title from "../../../../../components/Title";
+import { AdminMenu } from "../../../../../database/AdminMenu";
 
 const useStyles = makeStyles((theme) => ({
   noWrap: {
@@ -63,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 
 const sleep = (time) => new Promise((acc) => setTimeout(acc, time));
 
-export default function updateVehicle({ userID }) {
+export default function updateVehicle({ userID, oDau }) {
   const classes = useStyles();
 
   const breadcumbData = [
@@ -90,6 +85,7 @@ export default function updateVehicle({ userID }) {
     tenXe: "",
     soChoNgoi: 0,
     noiDangKy: "",
+    maODauXe: "",
   };
   return (
     <>
@@ -101,8 +97,20 @@ export default function updateVehicle({ userID }) {
             vehicles: [emptyVehicle],
           }}
           onSubmit={async (values, helpers) => {
-            await sleep(3000);
-            console.log(values);
+            const { vehicles } = values;
+            await axios({
+              method: "POST",
+              withCredentials: true,
+              url: "/api/admin/accounts/vehicle",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              data: {
+                id: userID,
+                vehicles,
+              },
+            });
+            Router.replace(`/admin/accounts/details/update?id=${userID}`);
             helpers.setTouched({});
           }}
           validationSchema={object({
@@ -118,6 +126,7 @@ export default function updateVehicle({ userID }) {
                   .min(4, "Số chỗ ngồi tối thiểu là 4")
                   .max(100, "Số chỗ ngồi tối thiểu là 100"),
                 noiDangKy: string().required("Cần nhập nơi đăng ký biển số"),
+                maODauXe: string().required("Cần có ô đậu xe"),
               })
             ).min(1, "You need to provide at least 1 id"),
           })}
@@ -143,7 +152,7 @@ export default function updateVehicle({ userID }) {
                           spacing={2}
                         >
                           <Grid item container spacing={2} xs={12} sm="auto">
-                            <Grid item xs={12} sm={3}>
+                            <Grid item xs={12} sm={2}>
                               <Field
                                 fullWidth
                                 name={`vehicles.${index}.id`}
@@ -151,7 +160,7 @@ export default function updateVehicle({ userID }) {
                                 label="Biển số"
                               />
                             </Grid>
-                            <Grid item xs={12} sm={3}>
+                            <Grid item xs={12} sm={2}>
                               <Field
                                 fullWidth
                                 name={`vehicles.${index}.tenXe`}
@@ -159,13 +168,13 @@ export default function updateVehicle({ userID }) {
                                 label="Tên xe"
                               />
                             </Grid>
-                            <Grid item xs={12} sm={3}>
+                            <Grid item xs={12} sm={2}>
                               <Field
                                 fullWidth
                                 name={`vehicles[${index}].soChoNgoi`}
                                 component={TextField}
                                 type="number"
-                                label="Số chỗ ngồi"
+                                label="Seats"
                               />
                             </Grid>
                             <Grid item xs={12} sm={3}>
@@ -175,6 +184,31 @@ export default function updateVehicle({ userID }) {
                                 component={TextField}
                                 label="Nơi đăng ký"
                               />
+                            </Grid>
+
+                            <Grid
+                              item
+                              xs={12}
+                              sm={3}
+                              className={classes.selectBox}
+                            >
+                              <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label">
+                                  Ô đậu
+                                </InputLabel>
+                                <Field
+                                  fullWidth
+                                  as={Select}
+                                  name={`vehicles.${index}.maODauXe`}
+                                  label="Ô đậu xe"
+                                >
+                                  {oDau.map((x, index) => (
+                                    <MenuItem value={x.id} key={index}>
+                                      {x.tenODau}
+                                    </MenuItem>
+                                  ))}
+                                </Field>
+                              </FormControl>
                             </Grid>
                           </Grid>
 
@@ -262,7 +296,7 @@ export default function updateVehicle({ userID }) {
 
 export const getServerSideProps = async (ctx) => {
   const userID = ctx.query.id;
-  
+
   //lấy cookie nhưng ở dạng string auth=abc123
   const cookie = ctx.req?.headers.cookie;
   //lấy cookie nhưng ở dạng object {auth: abc123}
@@ -278,36 +312,33 @@ export const getServerSideProps = async (ctx) => {
     return;
   }
 
-  // const vehicle = await axios({
-  //   method: "GET",
-  //   url: "http://localhost:3000/api/admin/accounts/vehicle",
-  //   withCredentials: true,
-  //   headers: {
-  //     Cookie: cookie || null,
-  //     "Content-Type": "application/json",
-  //   },
-  //   data: {
-  //     vehicleId,
-  //   },
-  // })
-  //   .then((res) => res.data)
-  //   .catch((err) => {
-  //     if (err.response.status === 401 && !ctx.req) {
-  //       Router.replace("/");
-  //       return;
-  //     }
+  const oDau = await axios({
+    method: "GET",
+    url: "http://localhost:3000/api/admin/accounts/create",
+    withCredentials: true,
+    headers: {
+      Cookie: cookie || null,
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => res.data)
+    .catch((err) => {
+      if (err.response.status === 401 && !ctx.req) {
+        Router.replace("/");
+        return;
+      }
 
-  //     //server-side
-  //     if (err.response.status === 401 && ctx.req) {
-  //       ctx.res?.writeHead(302, {
-  //         Location: "/",
-  //       });
-  //       ctx.res?.end();
-  //       return;
-  //     }
-  //   });
+      //server-side
+      if (err.response.status === 401 && ctx.req) {
+        ctx.res?.writeHead(302, {
+          Location: "/",
+        });
+        ctx.res?.end();
+        return;
+      }
+    });
 
-  return { props: { userID } };
+  return { props: { userID, oDau } };
 };
 
 updateVehicle.AdminMenu = AdminMenu;
