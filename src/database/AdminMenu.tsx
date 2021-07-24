@@ -21,13 +21,13 @@ export const AdminMenu = [
     path: "/admin/chuyen-xe",
   },
   {
-    name: "Thông tin ra vào",
+    name: "Thông tin ô đậu",
     icon: <BarChartIcon />,
     path: "/admin/entrance-infor",
   },
   {
     name: "Thông tin cá nhân",
     icon: <LayersIcon />,
-    path: "/admin/profile",
+    path: "/admin",
   },
 ];

@@ -6,76 +6,18 @@ import { secret } from "../../../api/secret";
 
 import axios from "axios";
 import { verify } from "jsonwebtoken";
+import { Box, Typography } from "@material-ui/core";
 
-const columns = [
-  { field: "id", headerName: "ID", width: 90 },
-  {
-    field: "thoiGianDiDuKien",
-    headerName: "Date ",
-    width: 160,
-    type: "date",
-  },
-  {
-    field: "thoiGianDenDuKien",
-    headerName: "Date ",
-    width: 160,
-    type: "date",
-  },
-  {
-    field: "thoiGianDiThucTe",
-    headerName: "Date ",
-    width: 160,
-    type: "date",
-  },
-  {
-    field: "thoiGianDenThucTe",
-    headerName: "Date ",
-    width: 160,
-    type: "date",
-  },
-];
-
-const rows = [
-  { id: 1, lastName: "Snow", firstName: "Jon", age: 35, date: "2000 12 02 êr" },
-  {
-    id: 2,
-    lastName: "Lannister",
-    firstName: "Cersei",
-    age: 42,
-    date: "2000 12 03",
-  },
-];
-
-export default function Admin({ data }) {
-
-  const test = JSON.parse(data[0].chiTietLichTrinh)
+export default function Admin({ adminData }) {
   return (
-    <div>
-      <p>
-        {JSON.stringify(test)}
-      </p>
-      <ul>
-        {test.map((x) => (
-          <li>
-            {x.destination}: + {x.time}
-          </li>
-        ))}
-      </ul>
-      <div style={{ height: 400, width: "100%" }}>
-        <DataGrid
-          rows={data}
-          columns={columns}
-          pageSize={5}
-          checkboxSelection
-          disableSelectionOnClick
-        />
-      </div>
-    </div>
+    <Box>
+      <Typography variant="h4">Hello Admin</Typography>
+      <pre>{JSON.stringify(adminData, null, 4)}</pre>
+    </Box>
   );
 }
 
 export const getServerSideProps = async (ctx) => {
-  //lấy cookie nhưng ở dạng string auth=abc123
   const cookie = ctx.req?.headers.cookie;
   //lấy cookie nhưng ở dạng object {auth: abc123}
   const { cookies } = ctx.req;
@@ -90,13 +32,16 @@ export const getServerSideProps = async (ctx) => {
     return;
   }
 
-  const data = await axios({
+  const adminData = await axios({
     method: "GET",
     url: "http://localhost:3000/api/admin",
     withCredentials: true,
     headers: {
       Cookie: cookie || null,
       "Content-Type": "application/json",
+    },
+    data: {
+      email: decoded.myPersonEmail,
     },
   })
     .then((res) => res.data)
@@ -116,7 +61,7 @@ export const getServerSideProps = async (ctx) => {
       }
     });
 
-  return { props: { data } };
+  return { props: { adminData } };
 };
 
 Admin.AdminMenu = AdminMenu;

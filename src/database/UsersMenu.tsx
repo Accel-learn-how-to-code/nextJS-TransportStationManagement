@@ -13,12 +13,12 @@ export const UsersMenu = [
   {
     name: "Quản lý tuyến xe",
     icon: <ShoppingCartIcon />,
-    path: "/users/tuyenXe",
+    path: "/users/tuyen-xe",
   },
   {
     name: "Quản lý chuyến xe",
     icon: <PeopleIcon />,
-    path: "/users/chuyenXe",
+    path: "/users/chuyen-xe",
   },
   {
     name: "Thông tin ra vào",
@@ -28,6 +28,6 @@ export const UsersMenu = [
   {
     name: "Thông tin cá nhân",
     icon: <LayersIcon />,
-    path: "/users/profile",
+    path: "/users",
   },
 ];

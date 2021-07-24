@@ -17,6 +17,7 @@
     "bcrypt": "^5.0.1",
     "cookie": "^0.4.1",
     "cookie-cutter": "^0.2.0",
+    "cookies": "^0.8.0",
     "formik": "^2.2.9",
     "formik-material-ui": "^3.0.1",
     "jsonwebtoken": "^8.5.1",

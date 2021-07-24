@@ -11,7 +11,7 @@ export default Authenciated(async function Test(
   let result = await pool
     .request()
     .query(
-      "select id, thoiGianDiDuKien, thoiGianDenDuKien, thoiGianDiThucTe, thoiGianDenThucTe, chiTietLichTrinh, status, maTuyenXe, maXe from tblChuyenXe"
+      `select id, UsersName, Email, TelNo, Gender, Address, HomeTown from tblAccount where Email = '${req.body.email}'`
     );
 
   res.json(result.recordset);

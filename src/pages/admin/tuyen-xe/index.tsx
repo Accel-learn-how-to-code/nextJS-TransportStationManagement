@@ -1,21 +1,19 @@
-import {
-  Box, Typography
-} from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import axios from "axios";
 import Router from "next/router";
 import React from "react";
 import { AdminMenu } from "../../../database/AdminMenu";
 import { Authorization } from "../../../database/Authorization";
 
-export default function ChuyenXe({ ChuyenXe }) {
+export default function TuyenXe({ TuyenXe }) {
   return (
     <Box>
-      <Typography variant="h3">Hello Chuyen Xe Adminn</Typography>
-      <pre>{JSON.stringify(ChuyenXe, null, 4)}</pre>
+      <Typography variant="h3">Hello Tuyen Xe Adminn</Typography>
+      <pre>{JSON.stringify(TuyenXe, null, 4)}</pre>
     </Box>
   );
 }
-ChuyenXe.AdminMenu = AdminMenu;
+TuyenXe.AdminMenu = AdminMenu;
 
 export const getServerSideProps = async (ctx) => {
   //lấy cookie nhưng ở dạng string auth=abc123
@@ -23,9 +21,9 @@ export const getServerSideProps = async (ctx) => {
 
   Authorization(ctx);
 
-  const ChuyenXe = await axios({
+  const TuyenXe = await axios({
     method: "GET",
-    url: "http://localhost:3000/api/admin/chuyen-xe",
+    url: "http://localhost:3000/api/admin/tuyen-xe",
     withCredentials: true,
     headers: {
       Cookie: cookie || null,
@@ -48,5 +46,5 @@ export const getServerSideProps = async (ctx) => {
         return;
       }
     });
-  return { props: { ChuyenXe } };
+  return { props: { TuyenXe } };
 };
