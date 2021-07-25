@@ -11,8 +11,26 @@ import { Box, Typography } from "@material-ui/core";
 export default function Admin({ adminData }) {
   return (
     <Box>
-      <Typography variant="h4">Hello Admin</Typography>
-      <pre>{JSON.stringify(adminData, null, 4)}</pre>
+      <Typography variant="h5" component="h6">
+        Chào mừng tới trang Quản lý bến xe trung tâm Đà Nẵng
+      </Typography>
+      <Box mt={2}>
+        <Typography variant="subtitle1">
+          Tên người dùng: {`${adminData[0].UsersName}`}
+        </Typography>
+        <Typography variant="subtitle1">
+          Email: {`${adminData[0].Email}`}
+        </Typography>
+        <Typography variant="subtitle1">
+          Phone: {`${adminData[0].TelNo}`}
+        </Typography>
+        <Typography variant="subtitle1">
+          Địa chỉ: {`${adminData[0].Address}`}
+        </Typography>
+        <Typography variant="subtitle1">
+          Quê quán: {`${adminData[0].HomeTown}`}
+        </Typography>
+      </Box>
     </Box>
   );
 }

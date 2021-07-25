@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     padding: 0,
   },
   dataGrid: {
-    height: 400,
+    height: 500,
     width: "100%",
   },
 }));
@@ -45,6 +45,7 @@ export default function DataTable({
   dataTableColumns,
   getSelectedValue,
   sortModel,
+  title,
 }) {
   const classes = useStyles();
   const [value, setValue] = useState("1");
@@ -59,7 +60,7 @@ export default function DataTable({
 
   return (
     <Paper className={classes.paper}>
-      <Title>Users Account</Title>
+      <Title>{title}</Title>
       <TabContext value={value}>
         <AppBar elevation={2} position="static">
           <TabList

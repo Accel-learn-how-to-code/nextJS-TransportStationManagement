@@ -23,6 +23,7 @@ import DataTable from "../../../components/DataTable";
 import SearchInput from "../../../components/searchInput";
 import Title from "../../../components/Title";
 import { AdminMenu } from "../../../database/AdminMenu";
+import CheckIcon from "@material-ui/icons/Check";
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -300,6 +301,27 @@ export default function Accounts({ dataUsers }) {
           <Grid item xs={12} sm={7} className={classes.gridButtonHolder}>
             <div className={classes.buttonHolder}>
               <Button
+                variant="outlined"
+                color="primary"
+                className={classes.button}
+                startIcon={<CheckIcon />}
+                style={{
+                  marginRight: 10,
+                }}
+              >
+                <Link href={`/admin/accounts`}>
+                  <div
+                    style={{
+                      textDecoration: "none",
+                      font: "#000000DE",
+                    }}
+                  >
+                    Thống kê
+                  </div>
+                </Link>
+              </Button>
+
+              <Button
                 variant="contained"
                 color="primary"
                 className={classes.button}
@@ -311,6 +333,7 @@ export default function Accounts({ dataUsers }) {
                   </div>
                 </Link>
               </Button>
+
               <IconButton
                 aria-label="refresh"
                 className={classes.icon}
@@ -328,6 +351,7 @@ export default function Accounts({ dataUsers }) {
         dataTableColumns={columns}
         sortModel={sortModel}
         getSelectedValue={getSelectedValue}
+        title="Tài khoản người dùng"
       />
 
       <AlertDialog
