@@ -62,6 +62,11 @@ export default function ChuyenXe({ ChuyenXe }) {
   const [chuyenXeList, setChuyenXeList] = useState(ChuyenXe);
   const [refesh, setRefresh] = useState(false);
   const [alertModel, setAlertModel] = useState(false);
+  const [selectedUser, setSelectedUser] = useState([]);
+
+  const getSelectedValue = (selectedValue) => {
+    setSelectedUser(selectedValue);
+  };
 
   const breadcumbData = [
     {
@@ -190,7 +195,7 @@ export default function ChuyenXe({ ChuyenXe }) {
         dataTable={dataTable}
         dataTableColumns={columns}
         sortModel={sortModel}
-        getSelectedValue={null}
+        getSelectedValue={getSelectedValue}
         title="Chuyến xe"
       />
     </Box>

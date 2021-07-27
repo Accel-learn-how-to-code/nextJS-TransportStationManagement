@@ -68,7 +68,11 @@ export default function EntranceInformation({ EntranceInformation }) {
     useState(EntranceInformation);
   const [refesh, setRefresh] = useState(false);
   const [alertModel, setAlertModel] = useState(false);
-
+  const [selectedUser, setSelectedUser] = useState([]);
+  
+  const getSelectedValue = (selectedValue) => {
+    setSelectedUser(selectedValue);
+  };
   const breadcumbData = [
     {
       path: "/admin",
@@ -189,7 +193,7 @@ export default function EntranceInformation({ EntranceInformation }) {
         dataTable={dataTable}
         dataTableColumns={columns}
         sortModel={sortModel}
-        getSelectedValue={null}
+        getSelectedValue={getSelectedValue}
         title="Thông tin ô đậu"
       />
     </Box>

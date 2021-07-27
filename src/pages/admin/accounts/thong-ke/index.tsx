@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1, 2, 4, 2),
     marginBottom: theme.spacing(2),
   },
+  line: {
+    height: 600,
+  },
 }));
 
 export default function ThongKe({ users, vehicles }) {
@@ -118,21 +121,27 @@ export default function ThongKe({ users, vehicles }) {
 
         <Grid container spacing={2}>
           <Grid item xs={12} sm={9}>
-            <Line
-              data={lineChartConfig}
-              options={{
-                maintainAspectRatio: false,
-                scales: {
-                  yAxes: [
-                    {
-                      ticks: {
-                        beginAtZero: true,
+            <Box className={classes.line}>
+              <Line
+                data={lineChartConfig}
+                options={{
+                  maintainAspectRatio: false,
+                  scales: {
+                    yAxes: [
+                      {
+                        ticks: {
+                          beginAtZero: true,
+                        },
                       },
-                    },
-                  ],
-                },
-              }}
-            />
+                    ],
+                  },
+                }}
+              />
+            </Box>
+
+            <Box textAlign="center">
+              <Typography variant="overline">Thống kê xe của Nhà xe</Typography>
+            </Box>
           </Grid>
 
           <Grid item xs={12} sm={3}>
