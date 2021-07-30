@@ -102,11 +102,12 @@ export default function UserDetail({ user, vehicle }) {
         id: selectedVehicle,
       },
     });
+    setAnchorEl(null);
 
     // Check that our status code is in the 200s,
     // meaning the request was successful.
     if (res.status < 300) {
-      router.replace(Router.asPath);
+      Router.reload()
     }
   };
 
@@ -333,6 +334,7 @@ export default function UserDetail({ user, vehicle }) {
           )}
         </Formik>
       </Paper>
+      
     </>
   );
 }

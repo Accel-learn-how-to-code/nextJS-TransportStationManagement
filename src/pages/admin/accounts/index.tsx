@@ -264,7 +264,6 @@ export default function Accounts({ dataUsers }) {
   };
 
   const deleteUser = async () => {
-    console.log(selectedUser[0]);
     const res = await axios({
       method: "post",
       url: "/api/admin/accounts/delete",
