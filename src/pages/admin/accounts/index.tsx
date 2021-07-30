@@ -309,7 +309,7 @@ export default function Accounts({ dataUsers }) {
                   marginRight: 10,
                 }}
               >
-                <Link href={`/admin/accounts`}>
+                <Link href={`/admin/accounts/thong-ke`}>
                   <div
                     style={{
                       textDecoration: "none",
