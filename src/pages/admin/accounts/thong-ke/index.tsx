@@ -95,6 +95,19 @@ export default function ThongKe({ users, vehicles }) {
     ],
   };
 
+  const barChartConfig2 = {
+    labels: vehiclesData.map((x) => x.AccountID),
+    datasets: [
+      {
+        label: "# of Vehicles",
+        data: vehiclesData.map((x) => x.SLX),
+        backgroundColor: ["rgba(75, 192, 192, 0.2)"],
+        borderColor: ["rgba(75, 192, 192, 1)"],
+        borderWidth: 1,
+      },
+    ],
+  };
+
   const lineChartConfig = {
     labels: vehiclesData.map((x) => x.AccountID),
     datasets: [
@@ -122,7 +135,7 @@ export default function ThongKe({ users, vehicles }) {
         <Grid container spacing={2}>
           <Grid item xs={12} sm={9}>
             <Box className={classes.line}>
-              <Line
+              {/* <Line
                 data={lineChartConfig}
                 options={{
                   maintainAspectRatio: false,
@@ -134,6 +147,29 @@ export default function ThongKe({ users, vehicles }) {
                         },
                       },
                     ],
+                  },
+                }}
+              /> */}
+
+              <Bar
+                data={barChartConfig2}
+                height={400}
+                width={600}
+                options={{
+                  maintainAspectRatio: false,
+                  scales: {
+                    yAxes: [
+                      {
+                        ticks: {
+                          beginAtZero: true,
+                        },
+                      },
+                    ],
+                  },
+                  legend: {
+                    labels: {
+                      fontSize: 25,
+                    },
                   },
                 }}
               />
