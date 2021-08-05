@@ -69,7 +69,7 @@ export default function EntranceInformation({ EntranceInformation }) {
   const [refesh, setRefresh] = useState(false);
   const [alertModel, setAlertModel] = useState(false);
   const [selectedUser, setSelectedUser] = useState([]);
-  
+
   const getSelectedValue = (selectedValue) => {
     setSelectedUser(selectedValue);
   };
@@ -85,10 +85,10 @@ export default function EntranceInformation({ EntranceInformation }) {
 
   //tạo data đưa vào data grid
   const approvedEntranceInformation = EntranceInformationList.filter(
-    (x) => x.status === "Đã duyệt"
+    (x) => x.status === "Đã đậu"
   );
   const inapprovedEntranceInformation = EntranceInformationList.filter(
-    (x) => x.status === "Chưa duyệt"
+    (x) => x.status === "Còn trống"
   );
 
   const dataTable = [
@@ -118,9 +118,12 @@ export default function EntranceInformation({ EntranceInformation }) {
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 150 },
-    { field: "tenODau", headerName: "Tên ô đậu", width: 200 },
-    { field: "maKhuVuc", headerName: "Mã khu vực", width: 200 },
-    { field: "status", headerName: "Trạng thái", width: 200 },
+    { field: "tenODau", headerName: "Tên ô đậu", width: 150 },
+    { field: "tenXe", headerName: "Tên xe", width: 150 },
+    { field: "soChoNgoi", headerName: "Số chỗ", width: 150 },
+    { field: "AccountID", headerName: "Mã Nhà xe", width: 150 },
+    { field: "maKhuVuc", headerName: "Mã khu vực", width: 150 },
+    { field: "status", headerName: "Trạng thái", width: 150 },
     {
       field: "Action",
       headerName: " ",
@@ -148,6 +151,9 @@ export default function EntranceInformation({ EntranceInformation }) {
       ? EntranceInformationList.filter(
           (x) =>
             x.tenODau.toLowerCase().includes(inputValue.toLowerCase()) ||
+            x.tenXe.toLowerCase().includes(inputValue.toLowerCase()) ||
+            x.soChoNgoi.toLowerCase().includes(inputValue.toLowerCase()) ||
+            x.AccountID.toLowerCase().includes(inputValue.toLowerCase()) ||
             x.maKhuVuc.toLowerCase().includes(inputValue.toLowerCase())
         )
       : null;

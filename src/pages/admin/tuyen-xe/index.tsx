@@ -118,6 +118,7 @@ export default function TuyenXe({ TuyenXe }) {
     { field: "id", headerName: "ID", width: 150 },
     { field: "diemBatDau", headerName: "Điểm bắt đầu", width: 200 },
     { field: "diemKetThuc", headerName: "Điểm kết thúc", width: 200 },
+    { field: "SLChuyen", headerName: "Số chuyến", width: 150 },
     { field: "status", headerName: "Trạng thái", width: 200 },
     {
       field: "Action",

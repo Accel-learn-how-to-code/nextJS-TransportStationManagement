@@ -8,9 +8,11 @@ export default Authenciated(async function TuyenXe(
   res: NextApiResponse
 ) {
   let pool = await sql.connect(sqlConfig);
-  let result = await pool
-    .request()
-    .query("select id, diemBatDau, diemKetThuc, status from tblTuyenXe");
+  let result = await pool.request()
+    .query(`SELECT TX.id, TX.diemBatDau, TX.diemKetThuc, TX.status, count(*) as SLChuyen
+    FROM tblTuyenXe as TX
+    JOIN tblChuyenXe as CX on CX.maTuyenXe = TX.id
+    GROUP BY TX.id, TX.diemBatDau, TX.diemKetThuc, TX.status`);
 
   res.json(result.recordset);
 });

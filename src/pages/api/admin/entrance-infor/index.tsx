@@ -8,9 +8,10 @@ export default Authenciated(async function EntranceInfor(
   res: NextApiResponse
 ) {
   let pool = await sql.connect(sqlConfig);
-  let result = await pool
-    .request()
-    .query("select id, tenODau, status, maKhuVuc from tblODauXe");
+  let result = await pool.request()
+    .query(`SELECT OD.id, OD.tenODau, V.tenXe, V.soChoNgoi, V.AccountID, OD.status, OD.maKhuVuc 
+    FROM tblODauXe as OD
+    JOIN tblVehicle as V on V.maODauXe = OD.id`);
 
   res.json(result.recordset);
 });
