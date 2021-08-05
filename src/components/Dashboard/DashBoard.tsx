@@ -1,32 +1,43 @@
-import React from "react";
-import clsx from "clsx";
-
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Drawer from "@material-ui/core/Drawer";
+import { Button } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
+import Container from "@material-ui/core/Container";
+import CssBaseline from "@material-ui/core/CssBaseline";
 import Divider from "@material-ui/core/Divider";
+import Drawer from "@material-ui/core/Drawer";
 import IconButton from "@material-ui/core/IconButton";
-import Container from '@material-ui/core/Container';
-
-import MenuIcon from "@material-ui/icons/Menu";
+import List from "@material-ui/core/List";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-
+import MenuIcon from "@material-ui/icons/Menu";
+import axios from "axios";
+import clsx from "clsx";
+import { useRouter } from "next/router";
+import React from "react";
+import { useStyles } from "../../styles/DashBoard";
 import MainListItem from "./listItemsDashboard";
-import { useStyles, drawerWidth } from "../../styles/DashBoard";
 
 export default function DashBoard(props) {
+  const classes = useStyles();
+  const router = useRouter();
   const [open, setOpen] = React.useState(true);
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
+
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const classes = useStyles();
-  //Check the page user is Admin or not
+
+  const logOut = async () => {
+    await axios({
+      method: "POST",
+      url: "http://localhost:3000/api/logout",
+    });
+
+    router.push("/");
+  };
 
   return (
     <div className={classes.root}>
@@ -57,6 +68,9 @@ export default function DashBoard(props) {
           >
             Quản lý bến xe
           </Typography>
+          <Button onClick={logOut} color="inherit">
+            Log out
+          </Button>
         </Toolbar>
       </AppBar>
 

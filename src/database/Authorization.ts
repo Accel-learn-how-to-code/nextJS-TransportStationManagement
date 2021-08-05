@@ -9,7 +9,7 @@ export function Authorization(ctx) {
 
   if (decoded.accountType !== "AD" && ctx.req) {
     ctx.res?.writeHead(302, {
-      Location: "http://localhost:3000/",
+      Location: "http://localhost:3000/error",
     });
     ctx.res?.end();
     return;

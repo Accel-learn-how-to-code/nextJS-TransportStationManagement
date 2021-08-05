@@ -11,7 +11,9 @@ export default Authenciated(async function ChuyenXe(
   let result = await pool
     .request()
     .query(
-      "select id, thoiGianDiDuKien, thoiGianDenDuKien, thoiGianDiThucTe, thoiGianDenThucTe, status, maTuyenXe, maXe from tblChuyenXe"
+      `select CX.id, TX.diemBatDau, TX.diemKetThuc, CX.maTuyenXe, CX.thoiGianDiDuKien, CX.thoiGianDenDuKien, CX.thoiGianDiThucTe, CX.thoiGianDenThucTe, CX.status, CX.maXe 
+      from tblChuyenXe as CX
+      join tblTuyenXe as TX on TX.id = CX.maTuyenXe`
     );
 
   res.json(result.recordset);

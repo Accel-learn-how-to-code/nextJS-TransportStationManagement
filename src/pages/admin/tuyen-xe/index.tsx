@@ -161,13 +161,13 @@ export default function TuyenXe({ TuyenXe }) {
       {alertModel ? (
         <div className={classes.alert}>
           <Alert severity="error">
-            This is an error alert — <strong>Không tìm thấy chuyến xe!</strong>
+            This is an error alert — <strong>Không tìm thấy Tuyến xe!</strong>
           </Alert>
         </div>
       ) : null}
 
       <Paper elevation={2} className={classes.grid}>
-        <Title>Quản lý chuyến xe</Title>
+        <Title>Quản lý Tuyến xe</Title>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={5} className={classes.gridInputHolder}>
             <SearchInput searchUsersName={searchUsersName} refesh={refesh} />

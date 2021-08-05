@@ -111,12 +111,14 @@ export default function ChuyenXe({ ChuyenXe }) {
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 100 },
+    { field: "diemBatDau", headerName: "Nơi bắt đầu", width: 150 },
+    { field: "diemKetThuc", headerName: "Nơi kết thúc", width: 150 },
+    { field: "maTuyenXe", headerName: "Mã Tuyến", width: 130 },
     { field: "thoiGianDiDuKien", headerName: "Giờ đi", width: 150 },
     { field: "thoiGianDenDuKien", headerName: "Giờ đến", width: 150 },
     { field: "thoiGianDiThucTe", headerName: "Giờ xuất phát", width: 150 },
     { field: "thoiGianDenThucTe", headerName: "Giờ kết thúc", width: 150 },
     { field: "status", headerName: "Trạng thái", width: 130 },
-    { field: "maTuyenXe", headerName: "Mã Tuyến", width: 130 },
     { field: "maXe", headerName: "Mã Xe", width: 100 },
     {
       field: "Action",
@@ -144,6 +146,8 @@ export default function ChuyenXe({ ChuyenXe }) {
     let searchedData = inputValue
       ? chuyenXeList.filter(
           (x) =>
+            x.diemBatDau.toLowerCase().includes(inputValue.toLowerCase()) ||
+            x.diemKetThuc.toLowerCase().includes(inputValue.toLowerCase()) ||
             x.maTuyenXe.toLowerCase().includes(inputValue.toLowerCase()) ||
             x.maXe.toLowerCase().includes(inputValue.toLowerCase()) ||
             x.maXe.toLowerCase().includes(inputValue.toLowerCase()) ||
