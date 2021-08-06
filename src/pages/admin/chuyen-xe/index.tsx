@@ -111,8 +111,8 @@ export default function ChuyenXe({ ChuyenXe }) {
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 100 },
-    { field: "diemBatDau", headerName: "Nơi bắt đầu", width: 150 },
-    { field: "diemKetThuc", headerName: "Nơi kết thúc", width: 150 },
+    { field: "diemBatDau", headerName: "Nơi bắt đầu", width: 200 },
+    { field: "diemKetThuc", headerName: "Nơi kết thúc", width: 200 },
     { field: "maTuyenXe", headerName: "Mã Tuyến", width: 130 },
     { field: "thoiGianDiDuKien", headerName: "Giờ đi", width: 150 },
     { field: "thoiGianDenDuKien", headerName: "Giờ đến", width: 150 },
@@ -142,21 +142,50 @@ export default function ChuyenXe({ ChuyenXe }) {
     console.log("refreshed");
   };
 
+  const findCommonElements = (arr1, arr2) => {
+    // Create an empty object
+    let obj = {};
+
+    // Loop through the first array
+    for (let i = 0; i < arr1.length; i++) {
+      // Check if element from first array
+      // already exist in object or not
+      if (!obj[arr1[i]]) {
+        // If it doesn't exist assign the
+        // properties equals to the
+        // elements in the array
+        const element = arr1[i];
+        obj[element] = true;
+      }
+    }
+
+    // Loop through the second array
+    for (let j = 0; j < arr2.length; j++) {
+      // Check elements from second array exist
+      // in the created object or not
+      if (obj[arr2[j]]) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   const searchUsersName = (inputValue) => {
+
     let searchedData = inputValue
       ? chuyenXeList.filter(
           (x) =>
-            x.diemBatDau.toLowerCase().includes(inputValue.toLowerCase()) ||
-            x.diemKetThuc.toLowerCase().includes(inputValue.toLowerCase()) ||
-            x.maTuyenXe.toLowerCase().includes(inputValue.toLowerCase()) ||
-            x.maXe.toLowerCase().includes(inputValue.toLowerCase()) ||
-            x.maXe.toLowerCase().includes(inputValue.toLowerCase()) ||
-            x.thoiGianDiDuKien
+            inputValue.toLowerCase().includes(x.diemBatDau.toLowerCase()) ||
+            inputValue.toLowerCase().includes(x.diemKetThuc.toLowerCase()) ||
+            inputValue.toLowerCase().includes(x.maTuyenXe.toLowerCase()) ||
+            inputValue.toLowerCase().includes(x.maXe.toLowerCase()) ||
+            inputValue
               .toLowerCase()
-              .includes(inputValue.toLowerCase()) ||
-            x.thoiGianDenDuKien.toLowerCase().includes(inputValue.toLowerCase())
+              .includes(x.thoiGianDiDuKien.toLowerCase()) ||
+            inputValue.toLowerCase().includes(x.thoiGianDenDuKien.toLowerCase())
         )
       : null;
+
     searchedData && searchedData.length > 0
       ? (setChuyenXeList(searchedData), setAlertModel(false))
       : (setChuyenXeList(ChuyenXe), setAlertModel(true));
