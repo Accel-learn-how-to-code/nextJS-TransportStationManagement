@@ -21,7 +21,7 @@ export const UsersMenu = [
     path: "/users/chuyen-xe",
   },
   {
-    name: "Thông tin ra vào",
+    name: "Thông tin ô đậu",
     icon: <BarChartIcon />,
     path: "/users/entrance-infor",
   },

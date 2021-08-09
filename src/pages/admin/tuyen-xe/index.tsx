@@ -18,6 +18,8 @@ import SearchInput from "../../../components/searchInput";
 import Title from "../../../components/Title";
 import { AdminMenu } from "../../../database/AdminMenu";
 import { Authorization } from "../../../database/Authorization";
+import AddIcon from "@material-ui/icons/Add";
+import { CheckCircleOutline } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -68,7 +70,7 @@ export default function TuyenXe({ TuyenXe }) {
   const [refesh, setRefresh] = useState(false);
   const [alertModel, setAlertModel] = useState(false);
   const [selectedUser, setSelectedUser] = useState([]);
-  
+
   const getSelectedValue = (selectedValue) => {
     setSelectedUser(selectedValue);
   };
@@ -176,6 +178,36 @@ export default function TuyenXe({ TuyenXe }) {
 
           <Grid item xs={12} sm={7} className={classes.gridButtonHolder}>
             <div className={classes.buttonHolder}>
+              <Button
+                variant="outlined"
+                color="primary"
+                className={classes.button}
+                startIcon={<CheckCircleOutline />}
+                style={{
+                  marginRight: 10,
+                }}
+              >
+                <div
+                  style={{
+                    textDecoration: "none",
+                    font: "#000000DE",
+                  }}
+                >
+                  Chờ duyệt
+                </div>
+              </Button>
+
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                startIcon={<AddIcon />}
+              >
+                <div style={{ textDecoration: "none", font: "#000000DE" }}>
+                  Add New
+                </div>
+              </Button>
+
               <IconButton
                 aria-label="refresh"
                 className={classes.icon}

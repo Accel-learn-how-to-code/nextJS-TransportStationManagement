@@ -1,6 +1,8 @@
 import { Box, Button, Grid, IconButton, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { GridCellParams, GridColDef } from "@material-ui/data-grid";
+import { CheckCircleOutline } from "@material-ui/icons";
+import AddIcon from "@material-ui/icons/Add";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import { Alert } from "@material-ui/lab";
 import axios from "axios";
@@ -171,7 +173,6 @@ export default function ChuyenXe({ ChuyenXe }) {
   };
 
   const searchUsersName = (inputValue) => {
-
     let searchedData = inputValue
       ? chuyenXeList.filter(
           (x) =>
@@ -212,6 +213,36 @@ export default function ChuyenXe({ ChuyenXe }) {
 
           <Grid item xs={12} sm={7} className={classes.gridButtonHolder}>
             <div className={classes.buttonHolder}>
+              <Button
+                variant="outlined"
+                color="primary"
+                className={classes.button}
+                startIcon={<CheckCircleOutline />}
+                style={{
+                  marginRight: 10,
+                }}
+              >
+                <div
+                  style={{
+                    textDecoration: "none",
+                    font: "#000000DE",
+                  }}
+                >
+                  Chờ duyệt
+                </div>
+              </Button>
+
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                startIcon={<AddIcon />}
+              >
+                <div style={{ textDecoration: "none", font: "#000000DE" }}>
+                  Add New
+                </div>
+              </Button>
+
               <IconButton
                 aria-label="refresh"
                 className={classes.icon}

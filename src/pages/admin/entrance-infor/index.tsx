@@ -18,6 +18,7 @@ import SearchInput from "../../../components/searchInput";
 import Title from "../../../components/Title";
 import { AdminMenu } from "../../../database/AdminMenu";
 import { Authorization } from "../../../database/Authorization";
+import AddIcon from "@material-ui/icons/Add";
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -175,7 +176,7 @@ export default function EntranceInformation({ EntranceInformation }) {
       ) : null}
 
       <Paper elevation={2} className={classes.grid}>
-        <Title>Quản lý chuyến xe</Title>
+        <Title>Quản lý thông tin ô đậu</Title>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={5} className={classes.gridInputHolder}>
             <SearchInput searchUsersName={searchUsersName} refesh={refesh} />
@@ -183,6 +184,17 @@ export default function EntranceInformation({ EntranceInformation }) {
 
           <Grid item xs={12} sm={7} className={classes.gridButtonHolder}>
             <div className={classes.buttonHolder}>
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                startIcon={<AddIcon />}
+              >
+                <div style={{ textDecoration: "none", font: "#000000DE" }}>
+                  Add New
+                </div>
+              </Button>
+
               <IconButton
                 aria-label="refresh"
                 className={classes.icon}
